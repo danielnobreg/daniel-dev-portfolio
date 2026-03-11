@@ -156,7 +156,10 @@ const translations = {
         'contact.email': 'Seu Email',
         'contact.message': 'Sua Mensagem',
         'contact.send': 'Enviar Mensagem',
-        'footer.rights': 'Todos os direitos reservados.'
+        'footer.rights': 'Todos os direitos reservados.',
+        'thanks.title': 'Mensagem Enviada!',
+        'thanks.desc': 'Obrigado por entrar em contato. Retornarei o mais breve possível.',
+        'thanks.back': 'Voltar para o Início'
     },
     en: {
         'nav.home': 'Home',
@@ -180,7 +183,10 @@ const translations = {
         'contact.email': 'Your Email',
         'contact.message': 'Your Message',
         'contact.send': 'Send Message',
-        'footer.rights': 'All rights reserved.'
+        'footer.rights': 'All rights reserved.',
+        'thanks.title': 'Message Sent!',
+        'thanks.desc': 'Thank you for reaching out. I will get back to you as soon as possible.',
+        'thanks.back': 'Back to Home'
     }
 };
 

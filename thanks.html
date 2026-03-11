@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniel Nóbrega | Mensagem Enviada</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .thanks-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding-top: 80px; /* Accounts for navbar */
+        }
+        .thanks-card {
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            animation: fadeUpHero 1s ease forwards 0.2s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .thanks-icon {
+            color: var(--accent-color);
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1rem;
+        }
+        .thanks-title {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .thanks-desc {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        /* Override for thanks page simple header */
+        .nav-center { display: flex; }
+    </style>
+</head>
+<body>
+    <canvas id="bg-canvas"></canvas>
+    
+    <nav class="navbar">
+        <div class="logo">DANIEL</div>
+        
+        <div class="nav-center">
+            <ul class="nav-links">
+                <li><a href="index.html#home" class="nav-link" data-i18n="nav.home">Home</a></li>
+                <li><a href="index.html#about" class="nav-link" data-i18n="nav.about">Sobre</a></li>
+                <li><a href="index.html#projects" class="nav-link" data-i18n="nav.projects">Projetos</a></li>
+            </ul>
+        </div>
+
+        <div class="nav-controls">
+            <div class="lang-toggle">
+                <span id="lang-pt" class="active">PT</span> | <span id="lang-en">EN</span>
+            </div>
+            <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                <i data-lucide="sun" class="sun-icon"></i>
+                <i data-lucide="moon" class="moon-icon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <section class="thanks-section">
+            <div class="glass-card thanks-card">
+                <i data-lucide="check-circle" class="thanks-icon"></i>
+                <h1 class="thanks-title" data-i18n="thanks.title">Mensagem Enviada!</h1>
+                <p class="thanks-desc" data-i18n="thanks.desc">Obrigado por entrar em contato. Retornarei o mais breve possível.</p>
+                <a href="index.html" class="btn futuristic-btn">
+                    <i data-lucide="arrow-left"></i>
+                    <span data-i18n="thanks.back">Voltar para o Início</span>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
