@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.min.js"></script>
 </head>
 <body>
     <canvas id="bg-canvas"></canvas>
@@ -163,9 +163,10 @@
 
     <script src="script.js"></script>
     <script>
-        // Inicializar os ícones do Lucide
-        lucide.createIcons();
-        document.getElementById("year").textContent = new Date().getFullYear();
+        window.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
+            document.getElementById("year").textContent = new Date().getFullYear();
+        });
     </script>
 </body>
 </html>
