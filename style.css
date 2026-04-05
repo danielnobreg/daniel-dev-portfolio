@@ -467,7 +467,7 @@ section > h2 {
 
 .tag {
     background: rgba(10, 10, 10, 0.5);
-    color: var(--accent-color);
+    color: white;
     padding: 0.3rem 0.8rem;
     border-radius: 20px;
     font-size: 0.85rem;
@@ -538,6 +538,10 @@ section > h2 {
     font-family: 'Outfit', sans-serif;
     font-size: 1rem;
     transition: all 0.3s ease;
+}
+
+.contact-form textarea {
+    resize: none;
 }
 
 .contact-form input:focus,
