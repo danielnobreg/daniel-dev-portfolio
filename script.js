@@ -262,7 +262,7 @@ const translations = {
         'stacks.title': 'Stacks',
         'projects.title': 'Projetos',
         'projects.ixamina.desc': 'Plataforma SaaS Médica End-to-End inovadora. Integrada à Inteligência Artificial do Google Gemini, gera Laudos Clínicos de Hemogramas, Raios-X e ECGs em segundos, com infraestrutura de limites de uso, alertas de urgências e Painel Administrativo em tempo real.',
-        'projects.ixamina.link': 'Visit',
+        'projects.ixamina.link': 'Visite',
         'contact.title': 'Entre em Contato.',
         'contact.name': 'Seu Nome',
         'contact.email': 'Seu Email',
