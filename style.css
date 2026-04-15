@@ -420,6 +420,12 @@ section {
     height: 100%;
     border: none;
 }
+.project-static-img {
+    display: none;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
 /* CONTACT FORM MINIMAL */
 .form-wrapper {
@@ -515,8 +521,16 @@ footer {
     }
 }
 @media (max-width: 768px) {
+    .project-iframe {
+        display: none !important;
+    }
+    .project-static-img {
+        display: block !important;
+    }
     .image-mask {
-        height: 300px; /* Adapta iframe em mobile */
+        height: auto;
+        aspect-ratio: 16/9; /* Adapta imagem em mobile */
+        border-radius: 4px;
     }
     .about-desc {
         max-width: 100%;
