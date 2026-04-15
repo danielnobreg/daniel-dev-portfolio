@@ -4,161 +4,167 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daniel Nóbrega | Desenvolvedor</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;600&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
+    
     <script src="https://unpkg.com/lucide@0.378.0/dist/umd/lucide.min.js"></script>
+    <!-- Bibliotecas externas (CDNs) para as físicas e scroll suave (Overdrive) -->
+    <script src="https://unpkg.com/lenis@1.1.2/dist/lenis.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
 </head>
 <body>
-    <canvas id="bg-canvas"></canvas>
+    <!-- WebGL Background Dinâmico -->
+    <canvas id="glcanvas"></canvas>
+
+    <!-- Cursor customizado que seguirá o mouse iterativamente via GSAP -->
+    <div class="cursor"></div>
     
     <nav class="navbar">
-        <div class="logo">DANIEL</div>
+        <div class="logo" data-magnetic>DANIEL</div>
         
         <div class="nav-center">
             <ul class="nav-links">
-                <li><a href="#home" class="nav-link active" data-i18n="nav.home">Home</a></li>
-                <li><a href="#about" class="nav-link" data-i18n="nav.about">Sobre</a></li>
-                <li><a href="#stacks" class="nav-link" data-i18n="nav.stacks">Stacks</a></li>
-                <li><a href="#projects" class="nav-link" data-i18n="nav.projects">Projetos</a></li>
-                <li><a href="#contact" class="nav-link" data-i18n="nav.contact">Contato</a></li>
+                <li><a href="#home" class="nav-link active" data-i18n="nav.home" data-magnetic>Home</a></li>
+                <li><a href="#about" class="nav-link" data-i18n="nav.about" data-magnetic>Sobre</a></li>
+                <li><a href="#stacks" class="nav-link" data-i18n="nav.stacks" data-magnetic>Stacks</a></li>
+                <li><a href="#projects" class="nav-link" data-i18n="nav.projects" data-magnetic>Projetos</a></li>
+                <li><a href="#contact" class="nav-link" data-i18n="nav.contact" data-magnetic>Contato</a></li>
             </ul>
         </div>
 
         <div class="nav-controls">
             <div class="lang-toggle">
-                <span id="lang-pt" class="active">PT</span> | <span id="lang-en">EN</span>
+                <!-- Data-magnetic faz o hover no idioma ter física de mola -->
+                <span id="lang-pt" class="active" data-magnetic>PT</span> | <span id="lang-en" data-magnetic>EN</span>
             </div>
-            <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
-                <i data-lucide="sun" class="sun-icon"></i>
-                <i data-lucide="moon" class="moon-icon"></i>
-            </button>
+            <!-- Botão de tema foi removido. Foco total puramente no modo escuro profundo -->
         </div>
     </nav>
 
     <main>
-        <section id="home" class="hero section-reveal">
-            <div class="hero-content">
-                <h2 class="greeting hero-greeting-anim" data-i18n="home.greeting">Olá, eu sou</h2>
-                <h1 class="hero-name-anim hero-name" data-text="Daniel Nóbrega">Daniel Nóbrega.</h1>
-                <p class="subtitle hero-subtitle-anim" data-i18n="home.subtitle">Desenvolvedor Full Stack</p>
-                <a href="#projects" class="btn futuristic-btn hero-btn-anim">
-                    <span data-i18n="home.action">Ver Projetos</span>
-                    <i data-lucide="arrow-right"></i>
-                </a>
-            </div>
-        </section>
-
-        <section id="about" class="about section-reveal">
-            <div class="glass-card flex-container">
-                <div class="about-image-container">
-                    <div class="profile-img-placeholder">
-                        <img src="https://github.com/danielnobreg.png" alt="Daniel Nóbrega" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdib3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE5IDIxdjJhNCA0IDAgMCAxLTQgNEg5YTQgNCAwIDAgMS00LTR2LTIiPjwvcGF0aD48Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiPjwvY2lyY2xlPjwvc3ZnPg=='">
-                    </div>
-                </div>
-                <div class="about-text">
-                    <h2 data-i18n="about.title">Sobre Mim</h2>
-                    <p data-i18n="about.desc">Sou um Desenvolvedor Full Stack orientado para resultados, apaixonado por construir plataformas SaaS e integrar Inteligência Artificial. Com grande experiência em React.js, Next.js, Node.js e orquestração de APIs robustas usando bancos SQL e NoSQL. Meu objetivo é arquitetar soluções ponta a ponta que combinem uma interface incrível com performance e escalabilidade excepcionais.</p>
+        <section id="home" class="hero">
+            <div class="hero-layout">
+                <div class="hero-left">
+                    <p class="subtitle fade-up" data-i18n="home.subtitle">Desenvolvedor Full Stack</p>
+                    <h1 class="hero-name title-massive">
+                        <span class="fade-up d-block" data-text="Daniel">DANIEL</span>
+                        <span class="fade-up d-block accent-color" data-text="Nóbrega">NÓBREGA.</span>
+                    </h1>
                     
-                    <div class="social-links">
-                        <a href="https://github.com/danielnobreg" target="_blank" rel="noopener noreferrer" class="social-icon"><i data-lucide="github"></i></a>
-                        <a href="https://www.linkedin.com/in/danielnobregadasilva/" target="_blank" rel="noopener noreferrer" class="social-icon"><i data-lucide="linkedin"></i></a>
-                        <a href="curriculo.pdf" download="curriculo.pdf" class="social-icon" title="Download CV" data-i18n-title="about.resume"><i data-lucide="download"></i></a>
+                    <a href="#projects" class="btn brutal-btn mt-huge fade-up" data-magnetic>
+                        <span data-i18n="home.action">Ver Projetos</span>
+                        <i data-lucide="arrow-down-right"></i>
+                    </a>
+                </div>
+                <div class="hero-right fade-up">
+                    <div class="hero-manifesto">
+                        <p data-i18n="home.manifesto">"Arquitetando soluções ponta a ponta que unem interfaces impecáveis a backends escaláveis para a nova era da web."</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="stacks" class="stacks section-reveal">
-            <h2 data-i18n="stacks.title">Minhas Stacks</h2>
-            <div class="grid-container">
-                <div class="glass-card stack-card">
-                    <i data-lucide="code" class="stack-icon"></i>
-                    <h3>JavaScript / TypeScript</h3>
+        <section id="about" class="about">
+            <div class="about-grid">
+                <div class="about-left">
+                    <!-- Foto em Parallax Grayscale Elegante -->
+                    <div class="about-image mask-image fade-up">
+                        <img src="https://github.com/danielnobreg.png" alt="Daniel Nóbrega" class="img-parallax">
+                    </div>
+                    
+                    <div class="social-block fade-up">
+                        <a href="https://github.com/danielnobreg" target="_blank" rel="noopener noreferrer" class="social-link" data-magnetic><i data-lucide="github"></i> GitHub</a>
+                        <a href="https://www.linkedin.com/in/danielnobregadasilva/" target="_blank" rel="noopener noreferrer" class="social-link" data-magnetic><i data-lucide="linkedin"></i> LinkedIn</a>
+                        <a href="curriculo.pdf" download="curriculo.pdf" class="social-link" title="Download CV" data-i18n-title="about.resume" data-magnetic><i data-lucide="download"></i> <span data-i18n="about.resume">Currículo</span></a>
+                    </div>
                 </div>
-                <div class="glass-card stack-card">
-                    <i data-lucide="atom" class="stack-icon"></i>
-                    <h3>React & Next.js</h3>
-                </div>
-                <div class="glass-card stack-card">
-                    <i data-lucide="server" class="stack-icon"></i>
-                    <h3>Node.js & Express</h3>
-                </div>
-                <div class="glass-card stack-card">
-                    <i data-lucide="database" class="stack-icon"></i>
-                    <h3>PostgreSQL / Firebase</h3>
-                </div>
-                <div class="glass-card stack-card">
-                    <i data-lucide="braces" class="stack-icon"></i>
-                    <h3>Prisma / Drizzle ORM</h3>
-                </div>
-                <div class="glass-card stack-card">
-                    <i data-lucide="bot" class="stack-icon"></i>
-                    <h3>Gemini API / LLMs</h3>
-                </div>
-            </div>
-        </section>
-
-        <section id="projects" class="projects section-reveal">
-            <h2 data-i18n="projects.title">Meus Projetos</h2>
-            <div class="projects-carousel single-project">
-                <div class="glass-card project-card">
-                    <div class="card-content">
-                        <h3 class="project-title">iXamina</h3>
-                        <p class="project-desc" data-i18n="projects.ixamina.desc">Plataforma SaaS Médica End-to-End inovadora. Integrada à Inteligência Artificial do Google Gemini, gera Laudos Clínicos de Hemogramas, Raios-X e ECGs em segundos, com infraestrutura de limites de uso, alertas de urgências e Painel Administrativo em tempo real.</p>
-                        
-                        <div class="project-image-wrapper">
-                            <img src="ixamina-homepage.png" alt="iXamina Dashboard" class="project-img">
-                        </div>
-
-                        <div class="tags">
-                            <span class="tag">React.js</span>
-                            <span class="tag">Node.js</span>
-                            <span class="tag">Firebase</span>
-                            <span class="tag">Gemini AI</span>
-                            <span class="tag">TailwindCSS</span>
-                        </div>
-                        <div class="project-links mt-auto">
-                            <a href="https://github.com/danielnobreg/exam-summarizer" target="_blank" class="btn futuristic-btn btn-small w-full">
-                                <i data-lucide="github"></i> GitHub
-                            </a>
-                        </div>
+                
+                <div class="about-text">
+                    <h2 class="title-large fade-up" data-i18n="about.title">Sobre</h2>
+                    <div class="about-desc">
+                        <p class="fade-up" data-i18n="about.desc">Sou um Desenvolvedor Full Stack orientado para resultados, apaixonado por construir plataformas SaaS e integrar Inteligência Artificial. Com grande experiência em React.js, Next.js, Node.js e orquestração de APIs robustas usando bancos SQL e NoSQL. Meu objetivo é arquitetar soluções ponta a ponta que combinem uma interface incrível com performance e escalabilidade excepcionais.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="contact" class="contact section-reveal">
-            <h2 data-i18n="contact.title">Entre em Contato</h2>
-            <div class="glass-card contact-form-container">
-                <form action="https://formsubmit.co/contatonsdaniel@gmail.com" method="POST" class="contact-form">
-                    <!-- Configurações do formsubmit -->
+        <section id="stacks" class="stacks">
+            <h2 class="title-large fade-up" data-i18n="stacks.title">Stacks</h2>
+            <!-- Removemos os cartões de vidro, passamos a exibir a tecnologia de modo cru/brutal -->
+            <ul class="text-list">
+                <li class="fade-up">JavaScript / TypeScript <i data-lucide="code"></i></li>
+                <li class="fade-up">React & Next.js <i data-lucide="atom"></i></li>
+                <li class="fade-up">Node.js & Express <i data-lucide="server"></i></li>
+                <li class="fade-up">PostgreSQL / Firebase <i data-lucide="database"></i></li>
+                <li class="fade-up">Prisma / Drizzle ORM <i data-lucide="braces"></i></li>
+                <li class="fade-up">Gemini API / LLMs <i data-lucide="bot"></i></li>
+            </ul>
+        </section>
+
+        <section id="projects" class="projects">
+            <h2 class="title-large fade-up" data-i18n="projects.title">Projetos</h2>
+            
+            <div class="project-showcase">
+                <div class="project-info fade-up">
+                    <h3 class="project-title">iXamina</h3>
+                    <div class="tags">
+                        <span>React.js</span>
+                        <span>Node.js</span>
+                        <span>Firebase</span>
+                        <span>Gemini AI</span>
+                    </div>
+                    <p class="project-desc" data-i18n="projects.ixamina.desc">Plataforma SaaS Médica End-to-End inovadora. Integrada à Inteligência Artificial do Google Gemini, gera Laudos Clínicos de Hemogramas, Raios-X e ECGs em segundos, com infraestrutura de limites de uso, alertas de urgências e Painel Administrativo em tempo real.</p>
+                    <a href="http://exam-summarizer.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn brutal-btn btn-wire fade-up" data-magnetic data-i18n="projects.ixamina.link">
+                        Acesso Antecipado
+                    </a>
+                </div>
+                
+                <div class="project-visual fade-up">
+                    <div class="image-mask">
+                        <!-- Visualização Real em iFrame ao invés de imagem estática -->
+                        <iframe src="http://exam-summarizer.vercel.app/" class="project-iframe" loading="lazy" title="iXamina Live Preview"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <h2 class="title-huge text-center fade-up" data-i18n="contact.title">Fale Comigo.</h2>
+            <div class="form-wrapper fade-up">
+                <form action="https://formsubmit.co/contatonsdaniel@gmail.com" method="POST" class="minimal-form">
                     <input type="hidden" name="_next" value="https://daniel-dev-portfolio-liart.vercel.app/thanks.html">
                     <input type="hidden" name="_subject" value="Novo contato do Portfólio!">
                     <input type="hidden" name="_captcha" value="false">
 
-                    <input type="text" name="name" placeholder="Seu Nome" data-i18n-placeholder="contact.name" required>
-                    <input type="email" name="email" placeholder="Seu Email" data-i18n-placeholder="contact.email" required>
-                    <textarea name="message" placeholder="Sua Mensagem" data-i18n-placeholder="contact.message" rows="5" required></textarea>
+                    <div class="input-group">
+                        <input type="text" id="name" name="name" placeholder=" " required>
+                        <label for="name" data-i18n-placeholder="contact.name">Seu Nome</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" id="email" name="email" placeholder=" " required>
+                        <label for="email" data-i18n-placeholder="contact.email">Seu Email</label>
+                    </div>
+                    <div class="input-group">
+                        <textarea id="message" name="message" rows="1" placeholder=" " required></textarea>
+                        <label for="message" data-i18n-placeholder="contact.message">Sua Mensagem</label>
+                    </div>
                     
-                    <button type="submit" class="btn futuristic-btn">
-                        <span data-i18n="contact.send">Enviar Mensagem</span>
-                        <i data-lucide="send"></i>
+                    <button type="submit" class="btn brutal-btn w-full mt-large" data-magnetic>
+                        <span data-i18n="contact.send">Enviar</span>
+                        <i data-lucide="arrow-right"></i>
                     </button>
                 </form>
-            </div>
-            
-            <div class="contact-links">
-                <a href="mailto:contatonsdaniel@gmail.com" class="social-icon" title="Email"><i data-lucide="mail"></i></a>
-                <a href="https://github.com/danielnobreg" target="_blank" rel="noopener noreferrer" class="social-icon" title="GitHub"><i data-lucide="github"></i></a>
-                <a href="https://www.linkedin.com/in/danielnobregadasilva/" target="_blank" rel="noopener noreferrer" class="social-icon" title="LinkedIn"><i data-lucide="linkedin"></i></a>
             </div>
         </section>
     </main>
 
-    <footer>
-        <p>&copy; <span id="year"></span> - Daniel Nóbrega. <span data-i18n="footer.rights">Todos os direitos reservados.</span></p>
+    <footer class="fade-up">
+        <p>&copy; <span id="year"></span> - DANIEL NÓBREGA. <span data-i18n="footer.rights">ALL RIGHTS RESERVED.</span></p>
     </footer>
 
     <script src="script.js"></script>

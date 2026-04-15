@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="pt-BR" data-theme="dark">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daniel Nóbrega | Mensagem Enviada</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;700&family=Oswald:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -16,74 +16,59 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding-top: 80px; /* Accounts for navbar */
+            padding-top: 50px;
         }
         .thanks-card {
             max-width: 500px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1.5rem;
-            animation: fadeUpHero 1s ease forwards 0.2s;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        .thanks-icon {
-            color: var(--accent-color);
-            width: 80px;
-            height: 80px;
-            margin-bottom: 1rem;
+            gap: var(--space-lg);
         }
         .thanks-title {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            background: var(--gradient-text);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-family: var(--font-oswald);
+            font-size: var(--title-hero);
+            text-transform: uppercase;
+            font-weight: 700;
+            line-height: 0.95;
+            letter-spacing: -0.02em;
         }
         .thanks-desc {
             color: var(--text-muted);
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
+            font-size: var(--text-large);
+            font-weight: 300;
+            margin-bottom: var(--space-lg);
         }
-        /* Override for thanks page simple header */
+        .thanks-icon {
+            color: var(--accent-chumbo);
+            width: 60px;
+            height: 60px;
+            margin-bottom: var(--space-sm);
+        }
         .nav-center { display: flex; }
     </style>
 </head>
 <body>
-    <canvas id="bg-canvas"></canvas>
+    <canvas id="glcanvas"></canvas>
+    <div class="cursor"></div>
     
     <nav class="navbar">
         <div class="logo">DANIEL</div>
         
-        <div class="nav-center">
-            <ul class="nav-links">
-                <li><a href="index.html#home" class="nav-link" data-i18n="nav.home">Home</a></li>
-                <li><a href="index.html#about" class="nav-link" data-i18n="nav.about">Sobre</a></li>
-                <li><a href="index.html#projects" class="nav-link" data-i18n="nav.projects">Projetos</a></li>
-            </ul>
-        </div>
-
         <div class="nav-controls">
             <div class="lang-toggle">
                 <span id="lang-pt" class="active">PT</span> | <span id="lang-en">EN</span>
             </div>
-            <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
-                <i data-lucide="sun" class="sun-icon"></i>
-                <i data-lucide="moon" class="moon-icon"></i>
-            </button>
         </div>
     </nav>
 
     <main>
-        <section class="thanks-section">
-            <div class="glass-card thanks-card">
+        <section class="thanks-section fade-up">
+            <div class="thanks-card">
                 <i data-lucide="check-circle" class="thanks-icon"></i>
                 <h1 class="thanks-title" data-i18n="thanks.title">Mensagem Enviada!</h1>
                 <p class="thanks-desc" data-i18n="thanks.desc">Obrigado por entrar em contato. Retornarei o mais breve possível.</p>
-                <a href="index.html" class="btn futuristic-btn">
+                <a href="index.html" class="btn brutal-btn" data-magnetic>
                     <i data-lucide="arrow-left"></i>
                     <span data-i18n="thanks.back">Voltar para o Início</span>
                 </a>
@@ -91,6 +76,11 @@
         </section>
     </main>
 
+    <!-- Scripts necessários (Lenis / GSAP / etc não configurados aqui se não for rolável, mas usaremos script.js para I18n) -->
+    <!-- Para o site thanks, lenis não é obrigatório, mas vamos manter o script para as traduções -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
     <script src="script.js"></script>
     <script>
         lucide.createIcons();
