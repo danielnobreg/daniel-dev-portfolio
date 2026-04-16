@@ -227,20 +227,6 @@ fadeUps.forEach(element => {
     );
 });
 
-// Efeito Parallax em imagens
-const parallaxImages = document.querySelectorAll('.img-parallax');
-parallaxImages.forEach(img => {
-    gsap.to(img, {
-        yPercent: 20,
-        ease: "none",
-        scrollTrigger: {
-            trigger: img.parentElement,
-            start: "top bottom", 
-            end: "bottom top",
-            scrub: true
-        } 
-    });
-});
 
 
 // ==========================================================
