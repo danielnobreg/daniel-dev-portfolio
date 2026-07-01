@@ -429,6 +429,15 @@ section {
     user-select: none;
     -webkit-user-drag: none;
 }
+.project-static-img-always {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-drag: none;
+}
 
 /* CONTACT FORM MINIMAL */
 .form-wrapper {
