@@ -171,6 +171,14 @@ magnetics.forEach((el) => {
         gsap.to(el, { x: 0, y: 0, scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.3)' });
     });
 
+    el.addEventListener('mousedown', () => {
+        gsap.to(el, { scale: 0.95, duration: 0.1, ease: 'power3.out' });
+    });
+
+    el.addEventListener('mouseup', () => {
+        gsap.to(el, { scale: 1.05, duration: 0.3, ease: 'power3.out' });
+    });
+
     el.addEventListener('mousemove', (e) => {
         const rect = el.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
@@ -248,12 +256,12 @@ const translations = {
         'stacks.title': 'Stacks',
         'projects.title': 'Projetos',
         'projects.ixamina.desc': 'Plataforma SaaS Médica End-to-End inovadora. Integrada à Inteligência Artificial do Google Gemini, gera Laudos Clínicos de Hemogramas, Raios-X e ECGs em segundos, com infraestrutura de limites de uso, alertas de urgências e Painel Administrativo em tempo real.',
-        'projects.ixamina.link': 'Visite',
+        'projects.ixamina.link': 'Acesso Antecipado',
         'projects.taskflow.desc': 'Plataforma Kanban completa com API REST em Java 21 e Spring Boot 3.5. Inclui segurança com Spring Security e JWT, upload de avatares com Amazon S3, banco relacional PostgreSQL, e infraestrutura elástica na nuvem AWS via ECS Fargate, ECR e Load Balancer (ALB).',
         'projects.taskflow.link': 'Código Fonte',
         'projects.rodizzio.desc': 'Aplicação gamificada em tempo real para acompanhar pontuações e consumo em rodízios. Desenvolvida em Flutter e Firebase, conta com sincronização de lobby, votação de fim de rodada e roasts com estimativa de calorias via Gemini API.',
         'projects.rodizzio.link': 'Visite a Plataforma',
-        'contact.title': 'Entre em Contato.',
+        'contact.title': 'Fale Comigo.',
         'contact.name': 'Seu Nome',
         'contact.email': 'Seu Email',
         'contact.message': 'Sua Mensagem',
@@ -270,8 +278,7 @@ const translations = {
         'nav.projects': 'Projects',
         'nav.contact': 'Contact',
         'home.subtitle': 'Full Stack Developer',
-        'home.subtitle': 'Full Stack Developer',
-        'home.action': 'Projects',
+        'home.action': 'View Projects',
         'home.manifesto': '"Architecting end-to-end solutions that merge impeccable interfaces with scalable backends for the new web era."',
         'about.title': 'About',
         'about.desc': 'I am a results-driven Full Stack Developer passionate about building SaaS platforms and integrating Artificial Intelligence. Highly experienced with React.js, Next.js, Node.js and orchestrating robust APIs using SQL and NoSQL databases. My goal is to architect end-to-end solutions that combine an amazing interface with outstanding performance and scalability.',
@@ -279,7 +286,7 @@ const translations = {
         'stacks.title': 'Stacks',
         'projects.title': 'Projects',
         'projects.ixamina.desc': 'Innovative End-to-End Medical SaaS. Integrated with Google Gemini AI to generate Clinic Reports from Blood Tests, X-Rays, and ECGs in seconds, featuring rate limiting, urgency alerts, and a real-time Admin Panel.',
-        'projects.ixamina.link': 'Visit',
+        'projects.ixamina.link': 'Early Access',
         'projects.taskflow.desc': 'Full Kanban platform powered by a REST API built in Java 21 and Spring Boot 3.5. Features security with Spring Security and JWT, avatar uploads with Amazon S3, PostgreSQL database, and cloud infrastructure on AWS utilizing ECS Fargate, ECR, and Application Load Balancer (ALB).',
         'projects.taskflow.link': 'Source Code',
         'projects.rodizzio.desc': 'Real-time gamified app to track scores and food consumption at rodízios. Built with Flutter and Firebase, featuring lobby synchronization, majority vote session end, and Gemini AI-generated roasts/calorie estimations.',
