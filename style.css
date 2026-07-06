@@ -240,7 +240,7 @@ h1, h2, h3, .title-massive, .title-huge, .title-large {
 }
 .brutal-btn:hover {
     background-color: var(--accent-chumbo);
-    color: var(--text-primary);
+    color: var(--bg-color);
 }
 .btn-wire {
     background-color: transparent;
@@ -424,6 +424,7 @@ section {
 .project-desc {
     color: var(--text-muted);
     margin-bottom: var(--space-lg);
+    max-width: 65ch;
 }
 .project-visual {
     position: relative;
