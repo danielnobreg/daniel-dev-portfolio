@@ -307,22 +307,44 @@ h1, h2, h3, .title-massive, .title-huge, .title-large {
 .mt-huge { margin-top: var(--space-xl); }
 
 /* ==================================================
-   LAYOUT SECTIONS (HORIZONTAL FLOW - DESKTOP)
+   LAYOUT SECTIONS (VERTICAL DOCUMENT FLOW - DESKTOP)
    ================================================== */
 main {
     padding: 0;
     max-width: 100%;
     margin: 0;
+    background: #000000;
+}
+
+section:not(.project-panel) {
+    min-height: 100vh;
+    width: 100%;
+    padding: var(--space-xxl) var(--space-xl) var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Horizontal Pin Section Container */
+.projects-pin-section {
+    height: 100vh;
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    background: #000000;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 #horizontal-wrapper {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    width: 700vw;
+    width: 300vw;
     height: 100vh;
     overflow: hidden;
-    background: #000000;
+    will-change: transform;
 }
 
 .panel {
@@ -678,6 +700,10 @@ footer {
         display: flex;
         flex-direction: column;
         width: 100%;
+        height: auto;
+        overflow: visible;
+    }
+    .projects-pin-section {
         height: auto;
         overflow: visible;
     }
