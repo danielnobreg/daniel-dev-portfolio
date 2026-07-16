@@ -389,6 +389,20 @@ main {
     font-weight: 300;
     color: var(--text-primary);
     margin-bottom: var(--space-lg);
+    transition: text-decoration-color 0.3s ease;
+}
+.manifesto-cta-link {
+    display: block;
+    cursor: none;
+    transition: transform 0.3s var(--ease-out-expo);
+}
+.manifesto-cta-link:hover {
+    transform: scale(1.02);
+}
+.manifesto-cta-link:hover .manifesto-text {
+    text-decoration: underline;
+    text-decoration-style: wavy;
+    text-decoration-color: var(--text-primary);
 }
 
 /* ==================================================
@@ -690,26 +704,8 @@ footer {
     .nav-center {
         display: none; /* Hide navigation links, keep only logo and language for mobile */
     }
-    #scroll-container {
-        position: relative;
-        width: 100%;
-        height: auto;
-        overflow: visible;
-    }
     .panel {
-        position: relative;
-        top: auto;
-        left: auto;
-        width: 100%;
-        min-height: 100dvh;
-        height: auto;
-        opacity: 1 !important;
-        transform: none !important;
-        pointer-events: auto !important;
-        flex-shrink: 1;
         padding: var(--space-xl) var(--space-lg);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        z-index: auto !important;
     }
     .hero-canvas-container, .about-ink-grid, .project-showcase {
         grid-template-columns: 1fr;
