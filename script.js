@@ -147,8 +147,8 @@ magnetics.forEach((el) => {
 // ==========================================================
 // 3. GSAP HORIZONTAL PAN & DYNAMIC SCROLL ANIMATIONS
 // ==========================================================
-const horizontalWrapper = document.getElementById("horizontal-wrapper");
-const panels = gsap.utils.toArray("#horizontal-wrapper .panel");
+const scrollContainer = document.getElementById("scroll-container");
+const panels = gsap.utils.toArray("#scroll-container > .panel");
 let scrollTriggerInstance;
 
 lenis.on('scroll', ScrollTrigger.update);
@@ -161,154 +161,169 @@ function initScrollAnimation() {
     // Clean up all existing ScrollTriggers to prevent leaks on resize
     ScrollTrigger.getAll().forEach(t => t.kill());
 
-    if (window.innerWidth > 1024 && horizontalWrapper && panels.length > 0) {
-        // Pin projects container and translate horizontal wrapper
+    if (window.innerWidth > 1024 && scrollContainer && panels.length > 0) {
+        // Reset properties to initial zoom states before building the timeline
+        gsap.set(panels, { opacity: 0, scale: 2, rotate: 0, pointerEvents: "none", zIndex: 1 });
+        gsap.set(panels[0], { opacity: 1, scale: 1, pointerEvents: "auto", zIndex: 2 });
+
+        const tl = gsap.timeline();
+
+        // 1. Hero (0) -> About (1)
+        tl.to("#home", { scale: 0.5, opacity: 0, rotate: -4, pointerEvents: "none", duration: 1 })
+          .fromTo("#about", 
+              { scale: 2, opacity: 0, rotate: 4, pointerEvents: "none" },
+              { scale: 1, opacity: 1, rotate: 0, pointerEvents: "auto", duration: 1 },
+              "<"
+          );
+
+        // 2. About (1) -> Stacks (2)
+        tl.to("#about", { scale: 0.5, opacity: 0, rotate: 4, pointerEvents: "none", duration: 1 })
+          .fromTo("#stacks", 
+              { scale: 2, opacity: 0, rotate: -4, pointerEvents: "none" },
+              { scale: 1, opacity: 1, rotate: 0, pointerEvents: "auto", duration: 1 },
+              "<"
+          );
+        // Animate profile image rotation dynamically during about transition
+        tl.fromTo("#about .about-image", { rotate: -8 }, { rotate: 4, duration: 1 }, "-=1");
+
+        // 3. Stacks (2) -> Project 1 (3)
+        tl.to("#stacks", { scale: 0.5, opacity: 0, rotate: -4, pointerEvents: "none", duration: 1 })
+          .fromTo("#proj-1", 
+              { scale: 2, opacity: 0, rotate: 4, pointerEvents: "none" },
+              { scale: 1, opacity: 1, rotate: 0, pointerEvents: "auto", duration: 1 },
+              "<"
+          );
+        // Bento cells stagger scale inside stack transition
+        tl.fromTo("#stacks .bento-cell", { scale: 0.7 }, { scale: 1, stagger: 0.05, duration: 1 }, "-=1");
+
+        // 4. Project 1 (3) -> Project 2 (4)
+        tl.to("#proj-1", { scale: 0.5, opacity: 0, rotate: 4, pointerEvents: "none", duration: 1 })
+          .fromTo("#proj-2", 
+              { scale: 2, opacity: 0, rotate: -4, pointerEvents: "none" },
+              { scale: 1, opacity: 1, rotate: 0, pointerEvents: "auto", duration: 1 },
+              "<"
+          );
+        // Local project visual zoom and parallax info shifts
+        tl.fromTo("#proj-1 .project-visual", { scale: 0.8 }, { scale: 1.08, duration: 1 }, "-=2");
+        tl.fromTo("#proj-1 .project-info", { y: 100 }, { y: -100, duration: 1 }, "-=2");
+
+        // 5. Project 2 (4) -> Project 3 (5)
+        tl.to("#proj-2", { scale: 0.5, opacity: 0, rotate: -4, pointerEvents: "none", duration: 1 })
+          .fromTo("#proj-3", 
+              { scale: 2, opacity: 0, rotate: 4, pointerEvents: "none" },
+              { scale: 1, opacity: 1, rotate: 0, pointerEvents: "auto", duration: 1 },
+              "<"
+          );
+        tl.fromTo("#proj-2 .project-visual", { scale: 0.8 }, { scale: 1.08, duration: 1 }, "-=2");
+        tl.fromTo("#proj-2 .project-info", { y: 100 }, { y: -100, duration: 1 }, "-=2");
+
+        // 6. Project 3 (5) -> Contact (6)
+        tl.to("#proj-3", { scale: 0.5, opacity: 0, rotate: 4, pointerEvents: "none", duration: 1 })
+          .fromTo("#contact", 
+              { scale: 2, opacity: 0, rotate: -4, pointerEvents: "none" },
+              { scale: 1, opacity: 1, rotate: 0, pointerEvents: "auto", duration: 1 },
+              "<"
+          );
+        tl.fromTo("#proj-3 .project-visual", { scale: 0.8 }, { scale: 1.08, duration: 1 }, "-=2");
+        tl.fromTo("#proj-3 .project-info", { y: 100 }, { y: -100, duration: 1 }, "-=2");
+
+        // Create the master ScrollTrigger to control the zoom timeline
         scrollTriggerInstance = ScrollTrigger.create({
-            trigger: "#projects",
+            trigger: "#scroll-container",
             pin: true,
             scrub: 1,
             start: "top top",
-            end: () => "+=" + (horizontalWrapper.scrollWidth - window.innerWidth),
-            animation: gsap.to(horizontalWrapper, {
-                x: () => -(horizontalWrapper.scrollWidth - window.innerWidth),
-                ease: "none"
-            }),
-            invalidateOnRefresh: true
-        });
-
-        // 1. ABOUT PANEL SCROLL ANIMATIONS (Profile image organic rotation & translation on vertical scroll)
-        gsap.fromTo("#about .about-image", 
-            { rotate: -8, scale: 0.85 },
-            {
-                rotate: 4,
-                scale: 1.05,
-                scrollTrigger: {
-                    trigger: "#about",
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: true
-                }
-            }
-        );
-        gsap.fromTo("#about .about-desc", 
-            { y: 60, opacity: 0.5 },
-            {
-                y: -60,
-                opacity: 1,
-                scrollTrigger: {
-                    trigger: "#about",
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: true
-                }
-            }
-        );
-
-        // 2. STACKS PANEL ANIMATIONS (Bento cells stagger scale-in zoom on vertical scroll)
-        gsap.fromTo("#stacks .bento-cell",
-            { scale: 0.75, opacity: 0.2, rotate: -2 },
-            {
-                scale: 1,
-                opacity: 1,
-                rotate: 0,
-                stagger: 0.05,
-                scrollTrigger: {
-                    trigger: "#stacks",
-                    start: "top bottom",
-                    end: "center center",
-                    scrub: true
-                }
-            }
-        );
-
-        // 3. PROJECTS SCROLL INTERACTIONS (Scale zoom and vertical parallax text flow on horizontal scroll)
-        panels.forEach((panel) => {
-            const visual = panel.querySelector(`.project-visual`);
-            const info = panel.querySelector(`.project-info`);
-            
-            if (visual) {
-                gsap.fromTo(visual,
-                    { scale: 0.75, rotate: -4 },
-                    {
-                        scale: 1.08,
-                        rotate: 2,
-                        scrollTrigger: {
-                            trigger: panel,
-                            containerAnimation: scrollTriggerInstance.animation,
-                            start: "left right",
-                            end: "right left",
-                            scrub: true
-                        }
-                    }
-                );
-            }
-
-            if (info) {
-                gsap.fromTo(info,
-                    { y: 100, opacity: 0.6 },
-                    {
-                        y: -100,
-                        opacity: 1,
-                        scrollTrigger: {
-                            trigger: panel,
-                            containerAnimation: scrollTriggerInstance.animation,
-                            start: "left right",
-                            end: "right left",
-                            scrub: true
-                        }
-                    }
-                );
+            end: "+=600%",
+            animation: tl,
+            invalidateOnRefresh: true,
+            onUpdate: self => {
+                checkActivePanel(self.progress);
             }
         });
     } else {
-        // Reset panels translation and animation states on mobile viewports
-        gsap.set(horizontalWrapper, { x: 0 });
+        // Reset element styles to default vertical scroll configs on mobile
+        gsap.set(panels, { opacity: 1, scale: 1, rotate: 0, pointerEvents: "auto", zIndex: "auto" });
         gsap.set("#about .about-image", { rotate: -2, scale: 1 });
-        gsap.set("#about .about-desc", { y: 0, opacity: 1 });
-        gsap.set("#stacks .bento-cell", { scale: 1, opacity: 1, rotate: 0 });
-        gsap.set(".project-visual", { scale: 1, rotate: 0 });
-        gsap.set(".project-info", { y: 0, opacity: 1 });
+        gsap.set("#stacks .bento-cell", { scale: 1 });
+        gsap.set(".project-visual", { scale: 1 });
+        gsap.set(".project-info", { y: 0 });
     }
 }
 
-// Initial load
-window.addEventListener("load", initScrollAnimation);
-window.addEventListener("resize", initScrollAnimation);
-
-// Active Scrollspy Navbar for both Desktop & Mobile (based on vertical elements)
-function checkActiveSection() {
-    const sections = document.querySelectorAll('main > section');
+// Highlight navbar links based on 3D transition state progress
+function checkActivePanel(progress) {
     const navLinks = document.querySelectorAll('.nav-center .nav-link');
-    let current = '';
+    const activeState = Math.min(6, Math.max(0, Math.round(progress * 6)));
+    
+    let linkIndexToHighlight = 0;
+    if (activeState === 0) linkIndexToHighlight = 0;
+    else if (activeState === 1) linkIndexToHighlight = 1;
+    else if (activeState === 2) linkIndexToHighlight = 2;
+    else if (activeState >= 3 && activeState <= 5) linkIndexToHighlight = 3;
+    else if (activeState === 6) linkIndexToHighlight = 4;
 
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (window.scrollY >= (sectionTop - sectionHeight / 3)) {
-            current = section.getAttribute('id');
-        }
-    });
-
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href').includes(current)) {
+    navLinks.forEach((link, idx) => {
+        if (idx === linkIndexToHighlight) {
             link.classList.add('active');
+        } else {
+            link.classList.remove('active');
         }
     });
 }
-window.addEventListener('scroll', checkActiveSection);
+
+// Active Scrollspy Navbar for Mobile viewports (standard vertical scroll)
+function checkActiveSectionMobile() {
+    if (window.innerWidth <= 1024) {
+        const sections = document.querySelectorAll('main > #scroll-container > section');
+        const navLinks = document.querySelectorAll('.nav-center .nav-link');
+        let current = '';
+
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (window.scrollY >= (sectionTop - sectionHeight / 3)) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            const href = link.getAttribute('href');
+            // Map sub project panels (proj-1, proj-2, proj-3) to 'Projetos' nav link
+            if (href.includes(current) || (current.startsWith('proj-') && href.includes('proj-1'))) {
+                link.classList.add('active');
+            }
+        });
+    }
+}
+window.addEventListener('scroll', checkActiveSectionMobile);
 
 // Scroll smooth action on navbar click
 const navLinks = document.querySelectorAll('.nav-center .nav-link');
-navLinks.forEach((link) => {
+navLinks.forEach((link, idx) => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
         const targetId = link.getAttribute('href');
-        lenis.scrollTo(targetId, {
-            offset: 0,
-            duration: 1.5,
-            ease: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-        });
+        
+        if (window.innerWidth > 1024 && scrollTriggerInstance) {
+            let targetState = idx;
+            if (idx === 3) targetState = 3; // First project proj-1
+            if (idx === 4) targetState = 6; // Contact Form
+            
+            const targetScrollY = scrollTriggerInstance.start + 
+                (targetState / 6) * (scrollTriggerInstance.end - scrollTriggerInstance.start);
+            
+            lenis.scrollTo(targetScrollY, {
+                duration: 1.5,
+                ease: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+            });
+        } else {
+            lenis.scrollTo(targetId, {
+                offset: -100,
+                duration: 1.5,
+                ease: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+            });
+        }
     });
 });
 
