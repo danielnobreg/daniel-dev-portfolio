@@ -26,8 +26,7 @@ if (inkCanvas) {
     });
 
     function drawInkTrail() {
-        ctx.fillStyle = "rgba(0, 0, 0, 0.08)"; // Creates trailing motion fade overlay
-        ctx.fillRect(0, 0, inkCanvas.width, inkCanvas.height);
+        ctx.clearRect(0, 0, inkCanvas.width, inkCanvas.height);
         
         ctx.lineCap = "round";
         ctx.lineJoin = "round";
@@ -84,11 +83,7 @@ const lenis = new Lenis({
     infinite: false,
 });
 
-function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-}
-requestAnimationFrame(raf);
+// Lenis update is managed solely by GSAP ticker loop below to prevent duplicate update loops
 
 // ==========================================================
 // 2. MAGNÉTICO & CURSOR GSAP (TACTILE MICRO-MOTION)
@@ -163,10 +158,8 @@ gsap.ticker.add((time) => {
 gsap.ticker.lagSmoothing(0);
 
 function initScrollAnimation() {
-    // Clean up if already exists to prevent duplication
-    if (scrollTriggerInstance) {
-        scrollTriggerInstance.kill();
-    }
+    // Clean up all existing ScrollTriggers to prevent leaks on resize
+    ScrollTrigger.getAll().forEach(t => t.kill());
 
     if (window.innerWidth > 1024 && horizontalWrapper && panels.length > 0) {
         // Pin projects container and translate horizontal wrapper
