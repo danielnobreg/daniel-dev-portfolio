@@ -217,33 +217,28 @@ h1, h2, h3, .title-massive, .title-huge, .title-large {
     text-shadow: 2px 0 rgba(200,200,200,0.5);
 }
 
-/* Active glitch state — fired by JS */
+/* Active glitch state — JS adds/removes this class for a finite burst */
 .glitch-active .hero-name-span::before {
     opacity: 1;
-    animation: glitch-shift-1 0.12s steps(1, end) infinite;
+    animation: glitch-shift-1 0.1s steps(1, end) 3;
 }
 .glitch-active .hero-name-span::after {
     opacity: 1;
-    animation: glitch-shift-2 0.12s steps(1, end) infinite;
+    animation: glitch-shift-2 0.1s steps(1, end) 3;
 }
 .glitch-active .title-massive {
-    animation: glitch-skew 0.12s steps(1, end) infinite;
+    animation: glitch-skew 0.1s steps(1, end) 3;
 }
 
-/* Hover glitch trigger zone */
+/* Name spans: precise hitbox = text width only, pointer cursor */
 #hero-glitch-zone {
-    cursor: none;
+    cursor: default;
 }
-#hero-glitch-zone:hover .hero-name-span::before {
-    opacity: 0.7;
-    animation: glitch-shift-1 0.3s steps(2, end) infinite;
-}
-#hero-glitch-zone:hover .hero-name-span::after {
-    opacity: 0.5;
-    animation: glitch-shift-2 0.3s steps(2, end) infinite;
-}
-#hero-glitch-zone:hover .title-massive {
-    animation: glitch-skew 0.3s steps(2, end) infinite;
+.hero-name-span {
+    position: relative;
+    display: block;
+    width: fit-content;
+    cursor: pointer;
 }
 
 .hero-subtitle {
@@ -256,8 +251,7 @@ h1, h2, h3, .title-massive, .title-huge, .title-large {
     margin-bottom: 0;
     transition: letter-spacing 0.5s ease, color 0.3s ease, font-family 0.1s;
 }
-.glitch-active .hero-subtitle,
-#hero-glitch-zone:hover .hero-subtitle {
+.glitch-active .hero-subtitle {
     letter-spacing: 0.35em;
     color: var(--text-primary);
 }

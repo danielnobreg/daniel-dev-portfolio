@@ -424,16 +424,18 @@ function triggerGlitchCycle() {
     }, 80); // swap font 80ms into the 240ms glitch burst
 }
 
-// Hover-only trigger — no auto-cycle
-let hoverCooldown = false;
-if (glitchZone) {
-    glitchZone.addEventListener('mouseenter', () => {
-        if (hoverCooldown) return;
-        hoverCooldown = true;
+// Click on the actual name text triggers glitch + font cycle
+// Hover is indicated by CSS cursor:pointer on .hero-name-span (width:fit-content)
+let glitchCooldown = false;
+nameSpans.forEach(span => {
+    span.addEventListener('click', () => {
+        if (glitchCooldown) return;
+        glitchCooldown = true;
         triggerGlitchCycle();
-        setTimeout(() => { hoverCooldown = false; }, 700);
+        // Cooldown matches glitch duration (80ms + 160ms) + small buffer
+        setTimeout(() => { glitchCooldown = false; }, 600);
     });
-}
+});
 
 
 // ==========================================================
