@@ -146,6 +146,7 @@ h1, h2, h3, .title-massive, .title-huge, .title-large {
 
 .title-massive {
     font-size: var(--title-hero);
+    margin-bottom: clamp(1.5rem, 3.5vw, 3rem);
 }
 .title-large {
     font-size: var(--title-section);
