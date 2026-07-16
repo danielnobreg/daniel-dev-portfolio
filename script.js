@@ -309,12 +309,26 @@ const fonts = [
 
 let fontIndex = 0;
 function cycleHeroFont() {
-    fontIndex = (fontIndex + 1) % fonts.length;
-    nameSpans.forEach(span => {
-        span.style.fontFamily = fonts[fontIndex];
+    gsap.to(nameSpans, {
+        opacity: 0,
+        scale: 0.95,
+        duration: 0.35,
+        ease: "power2.out",
+        onComplete: () => {
+            fontIndex = (fontIndex + 1) % fonts.length;
+            nameSpans.forEach(span => {
+                span.style.fontFamily = fonts[fontIndex];
+            });
+            gsap.to(nameSpans, {
+                opacity: 1,
+                scale: 1,
+                duration: 0.4,
+                ease: "power2.inOut"
+            });
+        }
     });
 }
-setInterval(cycleHeroFont, 3000);
+setInterval(cycleHeroFont, 5000);
 
 // ==========================================================
 // 4. I18N - INTERNATIONALIZATION & PREMIUM COPYWRITING
