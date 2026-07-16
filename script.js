@@ -301,38 +301,77 @@ navTriggerButtons.forEach((link) => {
     });
 });
 
-// Dynamic Hero Name Font Cycling (Occasional sketch vibe shifting)
-const nameSpans = document.querySelectorAll('.title-massive span');
+// Dynamic Hero Name Font Cycling — Glitch-style shift
+const nameSpans = document.querySelectorAll('.hero-name-span');
+const heroSubtitle = document.querySelector('.hero-subtitle');
+const glitchZone = document.getElementById('hero-glitch-zone');
+
 const fonts = [
+    { name: "'Oswald', sans-serif",              subtitle: "Desenvolvedor Full Stack" },
+    { name: "'Special Elite', cursive",           subtitle: "Full Stack Developer" },
+    { name: "'Architects Daughter', cursive",     subtitle: "— código. design. sistemas." },
+    { name: "'Permanent Marker', cursive",         subtitle: "Builder. Solver. Dev." },
+    { name: "'Courier Prime', monospace",          subtitle: "$ build --ship --repeat" }
+];
+
+const subtitleFonts = [
     "'Oswald', sans-serif",
     "'Special Elite', cursive",
-    "'Architects Daughter', handwriting",
+    "'Architects Daughter', cursive",
     "'Permanent Marker', cursive",
     "'Courier Prime', monospace"
 ];
 
 let fontIndex = 0;
-function cycleHeroFont() {
-    gsap.to(nameSpans, {
-        opacity: 0,
-        scale: 0.95,
-        duration: 0.35,
-        ease: "power2.out",
-        onComplete: () => {
-            fontIndex = (fontIndex + 1) % fonts.length;
-            nameSpans.forEach(span => {
-                span.style.fontFamily = fonts[fontIndex];
-            });
-            gsap.to(nameSpans, {
-                opacity: 1,
-                scale: 1,
-                duration: 0.4,
-                ease: "power2.inOut"
-            });
+let glitchTimeout = null;
+let glitchIntervalId = null;
+
+function triggerGlitchCycle() {
+    if (!glitchZone) return;
+
+    // Kick off glitch visuals
+    glitchZone.classList.add('glitch-active');
+
+    // Swap font mid-glitch (imperceptible under the artifact)
+    glitchTimeout = setTimeout(() => {
+        fontIndex = (fontIndex + 1) % fonts.length;
+        const nextFont = fonts[fontIndex];
+
+        nameSpans.forEach(span => {
+            span.style.fontFamily = nextFont.name;
+            // keep ::before/::after text in sync via data-text (it inherits font-family)
+        });
+
+        if (heroSubtitle) {
+            heroSubtitle.style.fontFamily = subtitleFonts[fontIndex];
+            heroSubtitle.textContent = nextFont.subtitle;
         }
+
+        // Remove glitch after a short burst
+        setTimeout(() => {
+            glitchZone.classList.remove('glitch-active');
+        }, 160);
+
+    }, 80); // swap font 80ms into the 240ms glitch burst
+}
+
+// Auto-cycle every 5 seconds
+glitchIntervalId = setInterval(triggerGlitchCycle, 5000);
+
+// Hover over the glitch zone also triggers a cycle (with debounce)
+let hoverCooldown = false;
+if (glitchZone) {
+    glitchZone.addEventListener('mouseenter', () => {
+        if (hoverCooldown) return;
+        hoverCooldown = true;
+        triggerGlitchCycle();
+        // Reset auto-interval so hover doesn't cause double-fire shortly after
+        clearInterval(glitchIntervalId);
+        glitchIntervalId = setInterval(triggerGlitchCycle, 5000);
+        setTimeout(() => { hoverCooldown = false; }, 800);
     });
 }
-setInterval(cycleHeroFont, 5000);
+
 
 // ==========================================================
 // 4. I18N - INTERNATIONALIZATION & PREMIUM COPYWRITING
