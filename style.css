@@ -307,7 +307,7 @@ h1, h2, h3, .title-massive, .title-huge, .title-large {
 .mt-huge { margin-top: var(--space-xl); }
 
 /* ==================================================
-   LAYOUT SECTIONS (VERTICAL DOCUMENT FLOW - DESKTOP)
+   LAYOUT SECTIONS (3D CAMERA PAN & ZOOM - DESKTOP)
    ================================================== */
 main {
     padding: 0;
@@ -316,47 +316,41 @@ main {
     background: #000000;
 }
 
-section:not(.project-panel) {
-    min-height: 100vh;
-    width: 100%;
-    padding: var(--space-xxl) var(--space-xl) var(--space-lg);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+#scroll-container {
     position: relative;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Horizontal Pin Section Container */
-.projects-pin-section {
+    width: 100vw;
     height: 100vh;
     overflow: hidden;
-    width: 100%;
-    position: relative;
     background: #000000;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-#horizontal-wrapper {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    width: 300vw;
-    height: 100vh;
-    overflow: hidden;
-    will-change: transform;
 }
 
 .panel {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
+    overflow: hidden;
     flex-shrink: 0;
     padding: var(--space-xxl) var(--space-xl) var(--space-lg);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    position: relative;
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    align-items: center;
+    background: #000000;
+    opacity: 0;
+    transform: scale(2);
+    pointer-events: none;
+    z-index: 1;
+    will-change: transform, opacity;
+}
+
+/* First panel starts visible */
+.panel:first-child {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: all;
+    z-index: 2;
 }
 
 /* ==================================================
@@ -696,25 +690,26 @@ footer {
     .nav-center {
         display: none; /* Hide navigation links, keep only logo and language for mobile */
     }
-    #horizontal-wrapper {
-        display: flex;
-        flex-direction: column;
+    #scroll-container {
+        position: relative;
         width: 100%;
-        height: auto;
-        overflow: visible;
-    }
-    .projects-pin-section {
         height: auto;
         overflow: visible;
     }
     .panel {
+        position: relative;
+        top: auto;
+        left: auto;
         width: 100%;
         min-height: 100dvh;
         height: auto;
+        opacity: 1 !important;
+        transform: none !important;
+        pointer-events: auto !important;
         flex-shrink: 1;
         padding: var(--space-xl) var(--space-lg);
-        border-right: none;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: auto !important;
     }
     .hero-canvas-container, .about-ink-grid, .project-showcase {
         grid-template-columns: 1fr;

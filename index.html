@@ -31,7 +31,7 @@
                 <li><a href="#home" class="nav-link active" data-i18n="nav.home" data-magnetic>Home</a></li>
                 <li><a href="#about" class="nav-link" data-i18n="nav.about" data-magnetic>Sobre</a></li>
                 <li><a href="#stacks" class="nav-link" data-i18n="nav.stacks" data-magnetic>Stacks</a></li>
-                <li><a href="#projects" class="nav-link" data-i18n="nav.projects" data-magnetic>Projetos</a></li>
+                <li><a href="#proj-1" class="nav-link" data-i18n="nav.projects" data-magnetic>Projetos</a></li>
                 <li><a href="#contact" class="nav-link" data-i18n="nav.contact" data-magnetic>Contato</a></li>
             </ul>
         </div>
@@ -44,208 +44,208 @@
     </nav>
  
     <main>
-        <!-- Home Section -->
-        <section id="home" class="hero">
-            <div class="hero-canvas-container">
-                <div class="hero-ink-text fade-up">
-                    <h1 class="title-massive">
-                        <span class="d-block" style="margin-bottom: 0.15em;">DANIEL</span>
-                        <span class="d-block ink-underline">NÓBREGA.</span>
-                    </h1>
-                    <p class="subtitle mt-md" data-i18n="home.subtitle">Desenvolvedor Full Stack</p>
+        <div id="scroll-container">
+            <!-- Home Panel -->
+            <section id="home" class="panel hero">
+                <div class="hero-canvas-container">
+                    <div class="hero-ink-text">
+                        <h1 class="title-massive">
+                            <span class="d-block" style="margin-bottom: 0.15em;">DANIEL</span>
+                            <span class="d-block ink-underline">NÓBREGA.</span>
+                        </h1>
+                        <p class="subtitle mt-md" data-i18n="home.subtitle">Desenvolvedor Full Stack</p>
+                    </div>
+                    <div class="hero-blueprint ink-border">
+                        <p class="manifesto-text" data-i18n="home.manifesto">"Escrevo código limpo. Desenho sistemas rápidos. Resolvo problemas de ponta a ponta sem firulas."</p>
+                        <a href="#proj-1" class="btn brutal-btn ink-border mt-huge" data-magnetic>
+                            <span data-i18n="home.action">Ver Projetos</span>
+                            <i data-lucide="arrow-down-right"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="hero-blueprint ink-border fade-up">
-                    <p class="manifesto-text" data-i18n="home.manifesto">"Escrevo código limpo. Desenho sistemas rápidos. Resolvo problemas de ponta a ponta sem firulas."</p>
-                    <a href="#projects" class="btn brutal-btn ink-border mt-huge" data-magnetic>
-                        <span data-i18n="home.action">Ver Projetos</span>
-                        <i data-lucide="arrow-down-right"></i>
-                    </a>
-                </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- About Section -->
-        <section id="about" class="about">
-            <div class="about-ink-grid">
-                <div class="about-visual fade-up">
-                    <div class="about-image ink-border">
-                        <img src="https://github.com/danielnobreg.png" alt="Daniel Nóbrega" class="img-static">
+            <!-- About Panel -->
+            <section id="about" class="panel about">
+                <div class="about-ink-grid">
+                    <div class="about-visual">
+                        <div class="about-image ink-border">
+                            <img src="https://github.com/danielnobreg.png" alt="Daniel Nóbrega" class="img-static">
+                        </div>
+                        
+                        <div class="social-block mt-huge">
+                            <a href="https://github.com/danielnobreg" target="_blank" rel="noopener noreferrer" class="social-link ink-border" data-magnetic><i data-lucide="github"></i> GitHub</a>
+                            <a href="https://www.linkedin.com/in/danielnobregadasilva/" target="_blank" rel="noopener noreferrer" class="social-link ink-border" data-magnetic><i data-lucide="linkedin"></i> LinkedIn</a>
+                            <a href="curriculo.pdf" download="curriculo.pdf" class="social-link ink-border" data-magnetic><i data-lucide="download"></i> <span data-i18n="about.resume">Currículo</span></a>
+                        </div>
                     </div>
                     
-                    <div class="social-block mt-huge">
-                        <a href="https://github.com/danielnobreg" target="_blank" rel="noopener noreferrer" class="social-link ink-border" data-magnetic><i data-lucide="github"></i> GitHub</a>
-                        <a href="https://www.linkedin.com/in/danielnobregadasilva/" target="_blank" rel="noopener noreferrer" class="social-link ink-border" data-magnetic><i data-lucide="linkedin"></i> LinkedIn</a>
-                        <a href="curriculo.pdf" download="curriculo.pdf" class="social-link ink-border" data-magnetic><i data-lucide="download"></i> <span data-i18n="about.resume">Currículo</span></a>
-                    </div>
-                </div>
-                
-                <div class="about-content fade-up">
-                    <h2 class="title-large" data-i18n="about.title">Sobre</h2>
-                    <div class="about-desc ink-border">
-                        <p data-i18n="about.desc">Sou desenvolvedor Full Stack. Construo APIs eficientes com Node.js e Java Spring Boot, crio frontends rápidos e responsivos com React/Next.js e automatizo infraestruturas na nuvem AWS. Meu foco é entregar software resiliente, com arquitetura limpa e performance pura, resolvendo problemas técnicos sem rodeios.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Stacks Section -->
-        <section id="stacks" class="stacks">
-            <h2 class="title-large fade-up" data-i18n="stacks.title">Stacks</h2>
-            <div class="bento-grid fade-up">
-                <div class="bento-cell ink-border" data-magnetic>
-                    <i data-lucide="code" class="bento-icon"></i>
-                    <h3>JavaScript &amp; TypeScript</h3>
-                    <p>Node.js, ES6+, React, Next.js, Angular</p>
-                </div>
-                <div class="bento-cell ink-border" data-magnetic>
-                    <i data-lucide="atom" class="bento-icon"></i>
-                    <h3>React &amp; Next.js</h3>
-                    <p>SSR, SSG, Server Components, Tailwind</p>
-                </div>
-                <div class="bento-cell ink-border" data-magnetic>
-                    <i data-lucide="server" class="bento-icon"></i>
-                    <h3>Node.js &amp; Express</h3>
-                    <p>APIs RESTful, Middleware, JWT Security</p>
-                </div>
-                <div class="bento-cell ink-border" data-magnetic>
-                    <i data-lucide="coffee" class="bento-icon"></i>
-                    <h3>Java &amp; Spring Boot</h3>
-                    <p>Clean Code, SOLID, MVC, JPA, Spring Boot 3</p>
-                </div>
-                <div class="bento-cell ink-border" data-magnetic>
-                    <i data-lucide="database" class="bento-icon"></i>
-                    <h3>Bancos de Dados</h3>
-                    <p>PostgreSQL, Firebase Firestore, NoSQL</p>
-                </div>
-                <div class="bento-cell ink-border" data-magnetic>
-                    <i data-lucide="cloud" class="bento-icon"></i>
-                    <h3>AWS Cloud &amp; Docker</h3>
-                    <p>ECS Fargate, ALB, S3 Bucket, Containerization</p>
-                </div>
-                <div class="bento-cell ink-border" data-magnetic>
-                    <i data-lucide="bot" class="bento-icon"></i>
-                    <h3>Gemini AI Integration</h3>
-                    <p>Prompt Engineering, LLMs APIs, Content Moderation</p>
-                </div>
-                <div class="bento-cell ink-border" data-magnetic>
-                    <i data-lucide="smartphone" class="bento-icon"></i>
-                    <h3>Flutter &amp; Dart</h3>
-                    <p>Multiplatform Apps, State Management, Real-time Sync</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Projects Section (Horizontal Pin Container) -->
-        <section id="projects" class="projects-pin-section">
-            <div id="horizontal-wrapper">
-                <div class="panel project-panel">
-                    <div class="project-showcase">
-                        <div class="project-info fade-up">
-                            <span class="project-number">01 // PROJECT</span>
-                            <h3 class="project-title">iXamina</h3>
-                            <div class="tags">
-                                <span>React.js</span>
-                                <span>Node.js</span>
-                                <span>Firebase</span>
-                                <span>Gemini AI</span>
-                            </div>
-                            <p class="project-desc" data-i18n="projects.ixamina.desc">Plataforma SaaS Médica End-to-End inovadora. Integrada à Inteligência Artificial do Google Gemini, gera Laudos Clínicos de Hemogramas, Raios-X e ECGs em segundos, com infraestrutura de limites de uso, alertas de urgências e Painel Administrativo em tempo real.</p>
-                            <a href="http://exam-summarizer.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn brutal-btn btn-wire ink-border fade-up" data-magnetic data-i18n="projects.ixamina.link">
-                                Acesso Antecipado
-                            </a>
-                        </div>
-                        
-                        <div class="project-visual fade-up ink-border">
-                            <div class="image-mask">
-                                <img src="ixamina-homepage.png" alt="iXamina Dashboard" class="project-static-img-always" draggable="false" oncontextmenu="return false;">
-                            </div>
+                    <div class="about-content">
+                        <h2 class="title-large" data-i18n="about.title">Sobre</h2>
+                        <div class="about-desc ink-border">
+                            <p data-i18n="about.desc">Sou desenvolvedor Full Stack. Construo APIs eficientes com Node.js e Java Spring Boot, crio frontends rápidos e responsivos com React/Next.js e automatizo infraestruturas na nuvem AWS. Meu foco é entregar software resiliente, com arquitetura limpa e performance pura, resolvendo problemas técnicos sem rodeios.</p>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                <div class="panel project-panel">
-                    <div class="project-showcase">
-                        <div class="project-info fade-up">
-                            <span class="project-number">02 // PROJECT</span>
-                            <h3 class="project-title">TaskFlow</h3>
-                            <div class="tags">
-                                <span>Java</span>
-                                <span>Spring Boot</span>
-                                <span>Angular</span>
-                                <span>AWS Cloud</span>
-                                <span>Docker</span>
-                            </div>
-                            <p class="project-desc" data-i18n="projects.taskflow.desc">Plataforma Kanban completa com API REST em Java 21 e Spring Boot 3.5. Inclui segurança com Spring Security e JWT, upload de avatares com Amazon S3, banco relacional PostgreSQL, e infraestrutura elástica na nuvem AWS via ECS Fargate, ECR e Load Balancer (ALB).</p>
-                            <a href="https://github.com/danielnobreg/taskflow" target="_blank" rel="noopener noreferrer" class="btn brutal-btn btn-wire ink-border fade-up" data-magnetic data-i18n="projects.taskflow.link">
-                                Código Fonte
-                            </a>
-                        </div>
-                        
-                        <div class="project-visual fade-up ink-border">
-                            <div class="image-mask">
-                                <img src="taskflow-preview.jpg" alt="TaskFlow Dashboard" class="project-static-img-always" draggable="false" oncontextmenu="return false;">
-                            </div>
-                        </div>
+            <!-- Stacks Panel -->
+            <section id="stacks" class="panel stacks">
+                <h2 class="title-large" data-i18n="stacks.title">Stacks</h2>
+                <div class="bento-grid">
+                    <div class="bento-cell ink-border" data-magnetic>
+                        <i data-lucide="code" class="bento-icon"></i>
+                        <h3>JavaScript &amp; TypeScript</h3>
+                        <p>Node.js, ES6+, React, Next.js, Angular</p>
+                    </div>
+                    <div class="bento-cell ink-border" data-magnetic>
+                        <i data-lucide="atom" class="bento-icon"></i>
+                        <h3>React &amp; Next.js</h3>
+                        <p>SSR, SSG, Server Components, Tailwind</p>
+                    </div>
+                    <div class="bento-cell ink-border" data-magnetic>
+                        <i data-lucide="server" class="bento-icon"></i>
+                        <h3>Node.js &amp; Express</h3>
+                        <p>APIs RESTful, Middleware, JWT Security</p>
+                    </div>
+                    <div class="bento-cell ink-border" data-magnetic>
+                        <i data-lucide="coffee" class="bento-icon"></i>
+                        <h3>Java &amp; Spring Boot</h3>
+                        <p>Clean Code, SOLID, MVC, JPA, Spring Boot 3</p>
+                    </div>
+                    <div class="bento-cell ink-border" data-magnetic>
+                        <i data-lucide="database" class="bento-icon"></i>
+                        <h3>Bancos de Dados</h3>
+                        <p>PostgreSQL, Firebase Firestore, NoSQL</p>
+                    </div>
+                    <div class="bento-cell ink-border" data-magnetic>
+                        <i data-lucide="cloud" class="bento-icon"></i>
+                        <h3>AWS Cloud &amp; Docker</h3>
+                        <p>ECS Fargate, ALB, S3 Bucket, Containerization</p>
+                    </div>
+                    <div class="bento-cell ink-border" data-magnetic>
+                        <i data-lucide="bot" class="bento-icon"></i>
+                        <h3>Gemini AI Integration</h3>
+                        <p>Prompt Engineering, LLMs APIs, Content Moderation</p>
+                    </div>
+                    <div class="bento-cell ink-border" data-magnetic>
+                        <i data-lucide="smartphone" class="bento-icon"></i>
+                        <h3>Flutter &amp; Dart</h3>
+                        <p>Multiplatform Apps, State Management, Real-time Sync</p>
                     </div>
                 </div>
+            </section>
 
-                <div class="panel project-panel">
-                    <div class="project-showcase">
-                        <div class="project-info fade-up">
-                            <span class="project-number">03 // PROJECT</span>
-                            <h3 class="project-title">Rodizzio.gg</h3>
-                            <div class="tags">
-                                <span>Flutter</span>
-                                <span>Firebase</span>
-                                <span>Cloud Functions</span>
-                                <span>Gemini AI</span>
-                                <span>NoSQL</span>
-                            </div>
-                            <p class="project-desc" data-i18n="projects.rodizzio.desc">Aplicação gamificada em tempo real para acompanhar pontuações e consumo em rodízios. Desenvolvida em Flutter e Firebase, conta com sincronização de lobby, votação de fim de rodada e roasts com estimativa de calorias via Gemini API.</p>
-                            <a href="https://rodizziogg.web.app/home" target="_blank" rel="noopener noreferrer" class="btn brutal-btn btn-wire ink-border fade-up" data-magnetic data-i18n="projects.rodizzio.link">
-                                Visite a Plataforma
-                            </a>
+            <!-- Project 1 Panel -->
+            <section id="proj-1" class="panel project-panel">
+                <div class="project-showcase">
+                    <div class="project-info">
+                        <span class="project-number">01 // PROJECT</span>
+                        <h3 class="project-title">iXamina</h3>
+                        <div class="tags">
+                            <span>React.js</span>
+                            <span>Node.js</span>
+                            <span>Firebase</span>
+                            <span>Gemini AI</span>
                         </div>
-                        
-                        <div class="project-visual fade-up ink-border">
-                            <div class="image-mask">
-                                <img src="rodizzio-preview.png" alt="Rodizzio.gg Interface" class="project-static-img-always" draggable="false" oncontextmenu="return false;">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact" class="contact">
-            <h2 class="title-huge text-center fade-up" data-i18n="contact.title">Fale Comigo.</h2>
-            <div class="form-wrapper fade-up">
-                <form action="https://formsubmit.co/contatonsdaniel@gmail.com" method="POST" class="minimal-form">
-                    <input type="hidden" name="_next" value="https://daniel-dev-portfolio-liart.vercel.app/thanks.html">
-                    <input type="hidden" name="_subject" value="Novo contato do Portfólio!">
-                    <input type="hidden" name="_captcha" value="false">
-
-                    <div class="input-group">
-                        <input type="text" id="name" name="name" placeholder=" " class="ink-border" required>
-                        <label for="name" data-i18n-placeholder="contact.name">Seu Nome</label>
-                    </div>
-                    <div class="input-group">
-                        <input type="email" id="email" name="email" placeholder=" " class="ink-border" required>
-                        <label for="email" data-i18n-placeholder="contact.email">Seu Email</label>
-                    </div>
-                    <div class="input-group">
-                        <textarea id="message" name="message" rows="1" placeholder=" " class="ink-border" required></textarea>
-                        <label for="message" data-i18n-placeholder="contact.message">Sua Mensagem</label>
+                        <p class="project-desc" data-i18n="projects.ixamina.desc">Plataforma SaaS Médica End-to-End inovadora. Integrada à Inteligência Artificial do Google Gemini, gera Laudos Clínicos de Hemogramas, Raios-X e ECGs em segundos, com infraestrutura de limites de uso, alertas de urgências e Painel Administrativo em tempo real.</p>
+                        <a href="http://exam-summarizer.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn brutal-btn btn-wire ink-border" data-magnetic data-i18n="projects.ixamina.link">
+                            Acesso Antecipado
+                        </a>
                     </div>
                     
-                    <button type="submit" class="btn brutal-btn w-full mt-large ink-border" data-magnetic>
-                        <span data-i18n="contact.send">Enviar</span>
-                        <i data-lucide="arrow-right"></i>
-                    </button>
-                </form>
-            </div>
-        </section>
+                    <div class="project-visual ink-border">
+                        <div class="image-mask">
+                            <img src="ixamina-homepage.png" alt="iXamina Dashboard" class="project-static-img-always" draggable="false" oncontextmenu="return false;">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Project 2 Panel -->
+            <section id="proj-2" class="panel project-panel">
+                <div class="project-showcase">
+                    <div class="project-info">
+                        <span class="project-number">02 // PROJECT</span>
+                        <h3 class="project-title">TaskFlow</h3>
+                        <div class="tags">
+                            <span>Java</span>
+                            <span>Spring Boot</span>
+                            <span>Angular</span>
+                            <span>AWS Cloud</span>
+                            <span>Docker</span>
+                        </div>
+                        <p class="project-desc" data-i18n="projects.taskflow.desc">Plataforma Kanban completa com API REST em Java 21 e Spring Boot 3.5. Inclui segurança com Spring Security e JWT, upload de avatares com Amazon S3, banco relacional PostgreSQL, e infraestrutura elástica na nuvem AWS via ECS Fargate, ECR e Load Balancer (ALB).</p>
+                        <a href="https://github.com/danielnobreg/taskflow" target="_blank" rel="noopener noreferrer" class="btn brutal-btn btn-wire ink-border" data-magnetic data-i18n="projects.taskflow.link">
+                            Código Fonte
+                        </a>
+                    </div>
+                    
+                    <div class="project-visual ink-border">
+                        <div class="image-mask">
+                            <img src="taskflow-preview.jpg" alt="TaskFlow Dashboard" class="project-static-img-always" draggable="false" oncontextmenu="return false;">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Project 3 Panel -->
+            <section id="proj-3" class="panel project-panel">
+                <div class="project-showcase">
+                    <div class="project-info">
+                        <span class="project-number">03 // PROJECT</span>
+                        <h3 class="project-title">Rodizzio.gg</h3>
+                        <div class="tags">
+                            <span>Flutter</span>
+                            <span>Firebase</span>
+                            <span>Cloud Functions</span>
+                            <span>Gemini AI</span>
+                            <span>NoSQL</span>
+                        </div>
+                        <p class="project-desc" data-i18n="projects.rodizzio.desc">Aplicação gamificada em tempo real para acompanhar pontuações e consumo em rodízios. Desenvolvida em Flutter e Firebase, conta com sincronização de lobby, votação de fim de rodada e roasts com estimativa de calorias via Gemini API.</p>
+                        <a href="https://rodizziogg.web.app/home" target="_blank" rel="noopener noreferrer" class="btn brutal-btn btn-wire ink-border" data-magnetic data-i18n="projects.rodizzio.link">
+                            Visite a Plataforma
+                        </a>
+                    </div>
+                    
+                    <div class="project-visual ink-border">
+                        <div class="image-mask">
+                            <img src="rodizzio-preview.png" alt="Rodizzio.gg Interface" class="project-static-img-always" draggable="false" oncontextmenu="return false;">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Panel -->
+            <section id="contact" class="panel contact">
+                <h2 class="title-huge text-center" data-i18n="contact.title">Fale Comigo.</h2>
+                <div class="form-wrapper">
+                    <form action="https://formsubmit.co/contatonsdaniel@gmail.com" method="POST" class="minimal-form">
+                        <input type="hidden" name="_next" value="https://daniel-dev-portfolio-liart.vercel.app/thanks.html">
+                        <input type="hidden" name="_subject" value="Novo contato do Portfólio!">
+                        <input type="hidden" name="_captcha" value="false">
+
+                        <div class="input-group">
+                            <input type="text" id="name" name="name" placeholder=" " class="ink-border" required>
+                            <label for="name" data-i18n-placeholder="contact.name">Seu Nome</label>
+                        </div>
+                        <div class="input-group">
+                            <input type="email" id="email" name="email" placeholder=" " class="ink-border" required>
+                            <label for="email" data-i18n-placeholder="contact.email">Seu Email</label>
+                        </div>
+                        <div class="input-group">
+                            <textarea id="message" name="message" rows="1" placeholder=" " class="ink-border" required></textarea>
+                            <label for="message" data-i18n-placeholder="contact.message">Sua Mensagem</label>
+                        </div>
+                        
+                        <button type="submit" class="btn brutal-btn w-full mt-large ink-border" data-magnetic>
+                            <span data-i18n="contact.send">Enviar</span>
+                            <i data-lucide="arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </div>
     </main>
 
     <footer class="fade-up">
