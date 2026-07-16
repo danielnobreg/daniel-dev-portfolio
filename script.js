@@ -1,117 +1,72 @@
 // ==========================================================
-// 0. WEBGL BACKGROUND NOISE (OVERDRIVE)
+// 0. INTERACTIVE INK/CHARCOAL CANVAS TRAIL (DRAWING PHYSICS)
 // ==========================================================
-const canvas = document.getElementById("glcanvas");
-if (canvas) {
-    const gl = canvas.getContext("webgl");
-    if (gl) {
-        const vertexShaderSource = `
-            attribute vec2 position;
-            void main() {
-                gl_Position = vec4(position, 0.0, 1.0);
-            }
-        `;
-        const fragmentShaderSource = `
-            precision mediump float;
-            uniform vec2 u_resolution;
-            uniform float u_time;
-            uniform vec2 u_mouse;
+const inkCanvas = document.getElementById("ink-canvas");
+if (inkCanvas) {
+    const ctx = inkCanvas.getContext("2d");
+    let points = [];
 
-            float random(vec2 st) {
-                return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
-            }
-
-            float noise(in vec2 st) {
-                vec2 i = floor(st);
-                vec2 f = fract(st);
-                float a = random(i);
-                float b = random(i + vec2(1.0, 0.0));
-                float c = random(i + vec2(0.0, 1.0));
-                float d = random(i + vec2(1.0, 1.0));
-                vec2 u = f * f * (3.0 - 2.0 * f);
-                return mix(a, b, u.x) + (c - a)* u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-            }
-
-            void main() {
-                vec2 st = gl_FragCoord.xy / u_resolution.xy;
-                st.x *= u_resolution.x / u_resolution.y;
-
-                // Força de reação do mouse
-                vec2 mousePos = u_mouse / u_resolution.xy;
-                mousePos.x *= u_resolution.x / u_resolution.y;
-                float dist = distance(st, mousePos);
-                
-                // Geração de ruído orgânico
-                vec2 pos = vec2(st * 4.0);
-                float n = noise(pos + u_time * 0.15 + noise(pos * 2.0 - u_time * 0.1));
-                
-                // Distorção magnética do mouse com suavizador
-                n += smoothstep(0.4, 0.0, dist) * 0.4;
-
-                // Chumbo / Pitch Black color math
-                vec3 color = vec3(0.02) + vec3(0.08) * n;
-                
-                gl_FragColor = vec4(color, 1.0);
-            }
-        `;
-
-        function compileShader(source, type) {
-            const shader = gl.createShader(type);
-            gl.shaderSource(shader, source);
-            gl.compileShader(shader);
-            return shader;
-        }
-
-        const program = gl.createProgram();
-        gl.attachShader(program, compileShader(vertexShaderSource, gl.VERTEX_SHADER));
-        gl.attachShader(program, compileShader(fragmentShaderSource, gl.FRAGMENT_SHADER));
-        gl.linkProgram(program);
-        gl.useProgram(program);
-
-        const positionBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-            -1.0, -1.0,  1.0, -1.0,  -1.0, 1.0,
-            -1.0,  1.0,  1.0, -1.0,   1.0, 1.0
-        ]), gl.STATIC_DRAW);
-
-        const positionLocation = gl.getAttribLocation(program, "position");
-        gl.enableVertexAttribArray(positionLocation);
-        gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
-
-        const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
-        const timeLocation = gl.getUniformLocation(program, "u_time");
-        const mouseLocation = gl.getUniformLocation(program, "u_mouse");
-
-        let mouseX = 0, mouseY = 0;
-        let targetMouseX = 0, targetMouseY = 0;
-        window.addEventListener('mousemove', (e) => {
-            targetMouseX = e.clientX;
-            targetMouseY = window.innerHeight - e.clientY;
-        });
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            gl.viewport(0, 0, canvas.width, canvas.height);
-            gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        function renderGL(time) {
-            mouseX += (targetMouseX - mouseX) * 0.05;
-            mouseY += (targetMouseY - mouseY) * 0.05;
-            
-            gl.uniform1f(timeLocation, time * 0.001);
-            gl.uniform2f(mouseLocation, mouseX, mouseY);
-
-            gl.clear(gl.COLOR_BUFFER_BIT);
-            gl.drawArrays(gl.TRIANGLES, 0, 6);
-            requestAnimationFrame(renderGL);
-        }
-        requestAnimationFrame(renderGL);
+    function resizeCanvas() {
+        inkCanvas.width = window.innerWidth;
+        inkCanvas.height = window.innerHeight;
     }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    // Capture mouse movements to append points to trail
+    window.addEventListener("mousemove", (e) => {
+        points.push({
+            x: e.clientX,
+            y: e.clientY,
+            age: 0,
+            vx: (Math.random() - 0.5) * 1.5,
+            vy: (Math.random() - 0.5) * 1.5,
+            size: Math.random() * 5 + 3
+        });
+    });
+
+    function drawInkTrail() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.08)"; // Creates trailing motion fade overlay
+        ctx.fillRect(0, 0, inkCanvas.width, inkCanvas.height);
+        
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+
+        // Draw charcoal sketchy particles/lines
+        for (let i = 0; i < points.length; i++) {
+            const p = points[i];
+            p.x += p.vx;
+            p.y += p.vy;
+            p.age += 1;
+
+            const alpha = Math.max(0, 1 - p.age / 80);
+            ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.25})`;
+            
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size * (1 - p.age / 80), 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Draw connected sketched line segment
+        if (points.length > 2) {
+            ctx.beginPath();
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
+            ctx.lineWidth = 2;
+            ctx.moveTo(points[0].x, points[0].y);
+            
+            // Render smooth quadratic curves between drawing nodes
+            for (let i = 1; i < points.length - 2; i++) {
+                const xc = (points[i].x + points[i + 1].x) / 2;
+                const yc = (points[i].y + points[i + 1].y) / 2;
+                ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+            }
+            ctx.stroke();
+        }
+
+        points = points.filter(p => p.age < 80);
+        requestAnimationFrame(drawInkTrail);
+    }
+    requestAnimationFrame(drawInkTrail);
 }
 
 // ==========================================================
@@ -135,48 +90,42 @@ function raf(time) {
 }
 requestAnimationFrame(raf);
 
-
 // ==========================================================
-// 2. MAGNÉTICO & CURSOR GSAP (OVERDRIVE)
+// 2. MAGNÉTICO & CURSOR GSAP (TACTILE MICRO-MOTION)
 // ==========================================================
-
-// Configuração do motor do GSAP para otimização do cursor
 gsap.registerPlugin(ScrollTrigger);
 
 const cursor = document.querySelector('.cursor');
 const magnetics = document.querySelectorAll('[data-magnetic]');
 
-// Otimização performática via quickTo do GSAP
 const xTo = gsap.quickTo(cursor, "x", {duration: 0.15, ease: "power3"});
 const yTo = gsap.quickTo(cursor, "y", {duration: 0.15, ease: "power3"});
 
 window.addEventListener('mousemove', (e) => {
-    // Esconder cursor se touch, mostrar se mouse
-    if(cursor.style.opacity === '0') cursor.style.opacity = '1';
-    
-    xTo(e.clientX);
-    yTo(e.clientY);
+    if (cursor) {
+        if(cursor.style.opacity === '0') cursor.style.opacity = '1';
+        xTo(e.clientX);
+        yTo(e.clientY);
+    }
 });
 
-// Física em molas para elementos magnéticos
 magnetics.forEach((el) => {
-    // Adicionar hover do cursor para estourar tamanho
     el.addEventListener('mouseenter', () => {
-        cursor.classList.add('active');
-        gsap.to(el, { scale: 1.05, duration: 0.3, ease: 'power3.out' });
+        if (cursor) cursor.classList.add('active');
+        gsap.to(el, { scale: 1.03, duration: 0.3, ease: 'power3.out' });
     });
     
     el.addEventListener('mouseleave', () => {
-        cursor.classList.remove('active');
-        gsap.to(el, { x: 0, y: 0, scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.3)' });
+        if (cursor) cursor.classList.remove('active');
+        gsap.to(el, { x: 0, y: 0, scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
     });
 
     el.addEventListener('mousedown', () => {
-        gsap.to(el, { scale: 0.95, duration: 0.1, ease: 'power3.out' });
+        gsap.to(el, { scale: 0.96, duration: 0.1, ease: 'power3.out' });
     });
 
     el.addEventListener('mouseup', () => {
-        gsap.to(el, { scale: 1.05, duration: 0.3, ease: 'power3.out' });
+        gsap.to(el, { scale: 1.03, duration: 0.3, ease: 'power3.out' });
     });
 
     el.addEventListener('mousemove', (e) => {
@@ -187,9 +136,9 @@ magnetics.forEach((el) => {
         const distX = e.clientX - centerX;
         const distY = e.clientY - centerY;
         
-        // Intensidade do Imã
-        const magneticPullX = distX * 0.4; 
-        const magneticPullY = distY * 0.4;
+        // Dynamic magnetic spring physics
+        const magneticPullX = distX * 0.35; 
+        const magneticPullY = distY * 0.35;
         
         gsap.to(el, {
             x: magneticPullX,
@@ -200,42 +149,142 @@ magnetics.forEach((el) => {
     });
 });
 
-
 // ==========================================================
-// 3. SCROLLTRIGGER ANIMATIONS
+// 3. GSAP HORIZONTAL PAN (LANDO NORRIS STYLE)
 // ==========================================================
+const horizontalWrapper = document.getElementById("horizontal-wrapper");
+const panels = gsap.utils.toArray("#horizontal-wrapper .panel");
+let scrollTriggerInstance;
 
-// Atualizar o motor do GSAP quando lenis rolar
 lenis.on('scroll', ScrollTrigger.update);
 gsap.ticker.add((time) => {
   lenis.raf(time * 1000);
 });
 gsap.ticker.lagSmoothing(0);
 
-// Revelações "Fade Up" usando máscara
-const fadeUps = document.querySelectorAll('.fade-up');
+function initScrollAnimation() {
+    // Clean up if already exists to prevent duplication
+    if (scrollTriggerInstance) {
+        scrollTriggerInstance.kill();
+    }
 
-fadeUps.forEach(element => {
-    gsap.fromTo(element, 
-        { 
-            y: 60,
-            opacity: 0
-        },
-        {
-            y: 0,
-            opacity: 1,
-            duration: 1.2,
-            ease: "power4.out",
-            scrollTrigger: {
-                trigger: element,
-                start: "top 90%", // Anima quando o topo bater em 90% da altura da tela
-                toggleActions: "play reverse play reverse" // Da play quando aparece, reverte quando sobe sumindo
+    if (window.innerWidth > 1024 && horizontalWrapper && panels.length > 0) {
+        // Compute travel distance
+        const totalPanX = -100 * (panels.length - 1);
+        
+        scrollTriggerInstance = ScrollTrigger.create({
+            trigger: horizontalWrapper,
+            pin: true,
+            scrub: 1,
+            // Horizontal panning matches wrapper width
+            end: () => "+=" + horizontalWrapper.offsetWidth,
+            animation: gsap.to(panels, {
+                xPercent: totalPanX,
+                ease: "none"
+            }),
+            snap: {
+                snapTo: 1 / (panels.length - 1),
+                duration: { min: 0.2, max: 0.5 },
+                delay: 0.1,
+                ease: "power2.inOut"
+            },
+            onUpdate: self => {
+                checkActivePanel(self.progress);
+            }
+        });
+    } else {
+        // Reset panels translation on mobile viewports
+        gsap.set(panels, { xPercent: 0 });
+    }
+}
+
+// Map Snap progress to navigation link highlighting
+function checkActivePanel(progress) {
+    const navLinks = document.querySelectorAll('.nav-center .nav-link');
+    const segment = 1 / (panels.length - 1);
+    const activeIndex = Math.min(
+        panels.length - 1,
+        Math.max(0, Math.round(progress / segment))
+    );
+
+    navLinks.forEach((link, idx) => {
+        link.classList.remove('active');
+        if (idx === activeIndex || (activeIndex >= 3 && activeIndex <= 5 && idx === 3) || (activeIndex === 6 && idx === 4)) {
+            // Projects are panels 3, 4, 5. Contact is panel 6.
+            if (idx === 3 && activeIndex >= 3 && activeIndex <= 5) {
+                link.classList.add('active');
+            } else if (idx === 4 && activeIndex === 6) {
+                link.classList.add('active');
+            } else if (idx === idx && activeIndex === idx) {
+                link.classList.add('active');
             }
         }
-    );
+    });
+}
+
+// Initial load
+window.addEventListener("load", initScrollAnimation);
+window.addEventListener("resize", initScrollAnimation);
+
+// Active Scrollspy Navbar for Mobile
+function checkActiveSectionMobile() {
+    if (window.innerWidth <= 1024) {
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-center .nav-link');
+        let current = '';
+
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (window.scrollY >= (sectionTop - sectionHeight / 3)) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(li => {
+            li.classList.remove('active');
+            if (li.getAttribute('href').includes(current)) {
+                li.classList.add('active');
+            }
+        });
+    }
+}
+window.addEventListener('scroll', checkActiveSectionMobile);
+
+// Scroll smooth action on navbar click
+const navLinks = document.querySelectorAll('.nav-center .nav-link');
+navLinks.forEach((link, idx) => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href');
+        
+        if (window.innerWidth > 1024 && scrollTriggerInstance) {
+            // Resolve section scroll mapping:
+            // Home (idx 0) -> 0%
+            // Sobre (idx 1) -> 1/6 progress
+            // Stacks (idx 2) -> 2/6 progress
+            // Projetos (idx 3) -> 3/6 progress (takes panel index 3)
+            // Contato (idx 4) -> 6/6 progress (takes panel index 6)
+            let targetPanelIdx = idx;
+            if (idx === 3) targetPanelIdx = 3; // First project iXamina
+            if (idx === 4) targetPanelIdx = 6; // Contact Form
+            
+            const targetScrollY = scrollTriggerInstance.start + 
+                (targetPanelIdx / (panels.length - 1)) * (scrollTriggerInstance.end - scrollTriggerInstance.start);
+            
+            lenis.scrollTo(targetScrollY, {
+                duration: 1.5,
+                ease: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+            });
+        } else {
+            lenis.scrollTo(targetId, {
+                offset: -100,
+                duration: 1.5,
+                ease: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+            });
+        }
+    });
 });
-
-
 
 // ==========================================================
 // 4. I18N - INTERNATIONALIZATION
@@ -308,11 +357,11 @@ const langEnBtn = document.getElementById('lang-en');
 
 function setLanguage(lang) {
     if(lang === 'pt') {
-        langPtBtn.classList.add('active');
-        langEnBtn.classList.remove('active');
+        if (langPtBtn) langPtBtn.classList.add('active');
+        if (langEnBtn) langEnBtn.classList.remove('active');
     } else {
-        langEnBtn.classList.add('active');
-        langPtBtn.classList.remove('active');
+        if (langEnBtn) langEnBtn.classList.add('active');
+        if (langPtBtn) langPtBtn.classList.remove('active');
     }
     
     document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -325,7 +374,6 @@ function setLanguage(lang) {
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
         const key = el.getAttribute('data-i18n-placeholder');
         if(translations[lang][key]) {
-            // Em input labels brutais o texto está nos labels. O placeholder original é espaço.
             if(el.tagName === 'LABEL') {
                 el.textContent = translations[lang][key];
             } else {
@@ -344,10 +392,10 @@ function setLanguage(lang) {
     localStorage.setItem('lang', lang);
     document.documentElement.setAttribute('lang', lang === 'pt' ? 'pt-BR' : 'en-US');
     
-    // Atualizar ScrollTrigger logo após mudar as strings pq pode afetar a altura total
     setTimeout(() => {
         ScrollTrigger.refresh();
-    }, 100);
+        initScrollAnimation();
+    }, 150);
 }
 
 if(langPtBtn) langPtBtn.addEventListener('click', () => setLanguage('pt'));
@@ -355,40 +403,3 @@ if(langEnBtn) langEnBtn.addEventListener('click', () => setLanguage('en'));
 
 const savedLang = localStorage.getItem('lang') || 'pt';
 setLanguage(savedLang);
-
-// Active Scrollspy Navbar Custom (Base)
-const sections = document.querySelectorAll('section');
-const navLinks = document.querySelectorAll('.nav-center .nav-link');
-
-// Scroll Suave ao clicar no Menu usando Lenis scrollTo
-navLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = link.getAttribute('href');
-        lenis.scrollTo(targetId, {
-            offset: -100,
-            duration: 1.5,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-        });
-    });
-});
-
-function checkActiveSection() {
-    let current = '';
-    
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (window.scrollY >= (sectionTop - sectionHeight / 3)) {
-            current = section.getAttribute('id');
-        }
-    });
-
-    navLinks.forEach(li => {
-        li.classList.remove('active');
-        if (li.getAttribute('href').includes(current)) {
-            li.classList.add('active');
-        }
-    });
-}
-window.addEventListener('scroll', checkActiveSection);
