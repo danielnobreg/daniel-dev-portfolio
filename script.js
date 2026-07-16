@@ -150,7 +150,7 @@ magnetics.forEach((el) => {
 });
 
 // ==========================================================
-// 3. GSAP HORIZONTAL PAN (LANDO NORRIS STYLE)
+// 3. GSAP HORIZONTAL PAN & DYNAMIC SCROLL ANIMATIONS
 // ==========================================================
 const horizontalWrapper = document.getElementById("horizontal-wrapper");
 const panels = gsap.utils.toArray("#horizontal-wrapper .panel");
@@ -192,9 +192,103 @@ function initScrollAnimation() {
                 checkActivePanel(self.progress);
             }
         });
+
+        // 1. ABOUT PANEL SCROLL ANIMATIONS (Profile image organic rotation & translation)
+        gsap.fromTo("#about .about-image", 
+            { rotate: -8, scale: 0.85 },
+            {
+                rotate: 4,
+                scale: 1.05,
+                scrollTrigger: {
+                    trigger: "#about",
+                    containerAnimation: scrollTriggerInstance.animation,
+                    start: "left right",
+                    end: "right left",
+                    scrub: true
+                }
+            }
+        );
+        gsap.fromTo("#about .about-desc", 
+            { y: 60, opacity: 0.5 },
+            {
+                y: -60,
+                opacity: 1,
+                scrollTrigger: {
+                    trigger: "#about",
+                    containerAnimation: scrollTriggerInstance.animation,
+                    start: "left right",
+                    end: "right left",
+                    scrub: true
+                }
+            }
+        );
+
+        // 2. STACKS PANEL ANIMATIONS (Bento cells stagger scale-in zoom)
+        gsap.fromTo("#stacks .bento-cell",
+            { scale: 0.75, opacity: 0.2, rotate: -2 },
+            {
+                scale: 1,
+                opacity: 1,
+                rotate: 0,
+                stagger: 0.05,
+                scrollTrigger: {
+                    trigger: "#stacks",
+                    containerAnimation: scrollTriggerInstance.animation,
+                    start: "left right",
+                    end: "center center",
+                    scrub: true
+                }
+            }
+        );
+
+        // 3. PROJECTS SCROLL INTERACTIONS (Scale zoom and vertical parallax text flow)
+        const projectPanels = ["#projects", "#project-taskflow", "#project-rodizzio"];
+        projectPanels.forEach((selector) => {
+            const visual = document.querySelector(`${selector} .project-visual`);
+            const info = document.querySelector(`${selector} .project-info`);
+            
+            if (visual) {
+                gsap.fromTo(visual,
+                    { scale: 0.75, rotate: -4 },
+                    {
+                        scale: 1.08,
+                        rotate: 2,
+                        scrollTrigger: {
+                            trigger: selector,
+                            containerAnimation: scrollTriggerInstance.animation,
+                            start: "left right",
+                            end: "right left",
+                            scrub: true
+                        }
+                    }
+                );
+            }
+
+            if (info) {
+                gsap.fromTo(info,
+                    { y: 100, opacity: 0.6 },
+                    {
+                        y: -100,
+                        opacity: 1,
+                        scrollTrigger: {
+                            trigger: selector,
+                            containerAnimation: scrollTriggerInstance.animation,
+                            start: "left right",
+                            end: "right left",
+                            scrub: true
+                        }
+                    }
+                );
+            }
+        });
     } else {
-        // Reset panels translation on mobile viewports
+        // Reset panels translation and animation states on mobile viewports
         gsap.set(panels, { xPercent: 0 });
+        gsap.set("#about .about-image", { rotate: -2, scale: 1 });
+        gsap.set("#about .about-desc", { y: 0, opacity: 1 });
+        gsap.set("#stacks .bento-cell", { scale: 1, opacity: 1, rotate: 0 });
+        gsap.set(".project-visual", { scale: 1, rotate: 0 });
+        gsap.set(".project-info", { y: 0, opacity: 1 });
     }
 }
 
@@ -287,7 +381,7 @@ navLinks.forEach((link, idx) => {
 });
 
 // ==========================================================
-// 4. I18N - INTERNATIONALIZATION
+// 4. I18N - INTERNATIONALIZATION & PREMIUM COPYWRITING
 // ==========================================================
 const translations = {
     pt: {
@@ -298,9 +392,9 @@ const translations = {
         'nav.contact': 'Contato',
         'home.subtitle': 'Desenvolvedor Full Stack',
         'home.action': 'Ver Projetos',
-        'home.manifesto': '"Arquitetando soluções ponta a ponta que unem interfaces impecáveis a backends escaláveis para a nova era da web."',
+        'home.manifesto': '"Transformando linhas de código em plataformas robustas e de alto impacto visual, onde cada detalhe é desenhado para escala e performance."',
         'about.title': 'Sobre',
-        'about.desc': 'Sou um Desenvolvedor Full Stack orientado para resultados, apaixonado por construir plataformas SaaS e integrar Inteligência Artificial. Com grande experiência em React.js, Next.js, Node.js e orquestração de APIs robustas usando bancos SQL e NoSQL. Meu objetivo é arquitetar soluções ponta a ponta que combinem uma interface incrível com performance e escalabilidade excepcionais.',
+        'about.desc': 'Sou desenvolvedor de software focado em criar soluções completas e eficientes de ponta a ponta. Minha especialidade é desenvolver APIs robustas e escaláveis utilizando Node.js e Java Spring Boot, criar interfaces ricas e reativas com React e Next.js, além de orquestrar infraestruturas ágeis em nuvem AWS e integrar recursos inteligentes via Gemini API. Trabalho escrevendo código sustentável, seguro e performático para resolver problemas reais de negócios.',
         'about.resume': 'Currículo',
         'stacks.title': 'Stacks',
         'projects.title': 'Projetos',
@@ -328,9 +422,9 @@ const translations = {
         'nav.contact': 'Contact',
         'home.subtitle': 'Full Stack Developer',
         'home.action': 'View Projects',
-        'home.manifesto': '"Architecting end-to-end solutions that merge impeccable interfaces with scalable backends for the new web era."',
+        'home.manifesto': '"Transforming lines of code into robust, high-impact platforms, where every detail is designed for scale and performance."',
         'about.title': 'About',
-        'about.desc': 'I am a results-driven Full Stack Developer passionate about building SaaS platforms and integrating Artificial Intelligence. Highly experienced with React.js, Next.js, Node.js and orchestrating robust APIs using SQL and NoSQL databases. My goal is to architect end-to-end solutions that combine an amazing interface with outstanding performance and scalability.',
+        'about.desc': 'I am a software engineer focused on building complete, efficient end-to-end solutions. My specialty is developing robust, scalable APIs with Node.js and Java Spring Boot, creating rich, reactive user interfaces with React and Next.js, orchestrating agile AWS cloud infrastructures, and integrating intelligent capabilities via the Gemini API. I write sustainable, secure, and highly performant code to solve real-world business challenges.',
         'about.resume': 'Download CV',
         'stacks.title': 'Stacks',
         'projects.title': 'Projects',
