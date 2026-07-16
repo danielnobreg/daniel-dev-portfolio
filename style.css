@@ -248,7 +248,7 @@ h1, h2, h3, .title-massive, .title-huge, .title-large {
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--text-muted);
-    margin-top: 0.15em;
+    margin-top: 0.05em;
     margin-bottom: 0;
     transition: letter-spacing 0.5s ease, color 0.3s ease, font-family 0.1s;
 }
@@ -488,26 +488,60 @@ main {
     max-width: 480px;
 }
 .manifesto-text {
-    font-size: clamp(1.15rem, 1.4vw, 1.45rem);
-    line-height: 1.5;
+    font-size: clamp(1.05rem, 1.3vw, 1.35rem);
+    line-height: 1.55;
     font-weight: 300;
     color: var(--text-primary);
     margin-bottom: var(--space-lg);
-    transition: text-decoration-color 0.3s ease;
+    position: relative;
 }
-.manifesto-cta-link {
+
+/* Precise inline clickable — hitbox hugs the text exactly */
+.manifesto-clickable {
+    display: inline;
+    cursor: pointer;
+    position: relative;
+    border-bottom: 1.5px solid rgba(255,255,255,0.15);
+    padding-bottom: 1px;
+    transition:
+        border-color 0.25s ease,
+        color 0.2s ease,
+        opacity 0.1s ease;
+}
+.manifesto-clickable:hover {
+    border-color: rgba(255,255,255,0.7);
+    color: #fff;
+}
+/* Scramble flash on click */
+.manifesto-clickable.text-flash {
+    opacity: 0.4;
+}
+
+/* Tiny hint label sits below, fades in after 1s idle */
+.manifesto-click-hint {
     display: block;
-    cursor: none;
-    transition: transform 0.3s var(--ease-out-expo);
+    font-family: var(--font-oswald);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 0.6em;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+    user-select: none;
 }
-.manifesto-cta-link:hover {
-    transform: scale(1.02);
+/* Show hint after the blueprint is hovered */
+.hero-blueprint:hover .manifesto-click-hint {
+    opacity: 1;
+    transform: translateY(0);
 }
-.manifesto-cta-link:hover .manifesto-text {
-    text-decoration: underline;
-    text-decoration-style: wavy;
-    text-decoration-color: var(--text-primary);
+/* Hide hint once user has clicked at least once */
+.manifesto-hint-used .manifesto-click-hint {
+    display: none;
 }
+
 
 /* ==================================================
    PANEL 2: ABOUT

@@ -336,7 +336,41 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     }
 });
 
-// Dynamic Hero Name Font Cycling — Glitch-style shift
+// -------------------------------------------------------
+// Manifesto CTA — click cycles through quotes
+// -------------------------------------------------------
+const manifestoEl = document.getElementById('manifesto-cta-text');
+const heroBlueprintEl = document.querySelector('.hero-blueprint');
+
+const manifestoQuotes = [
+    '"Escrevo código limpo. Desenho sistemas rápidos. Resolvo problemas de ponta a ponta sem firulas."',
+    '"Cada linha tem um motivo. Cada feature tem um propósito."',
+    '"Backend, frontend, infra — o que precisar, entrego."',
+    '"Sistemas que escalam começam com decisões simples."',
+    '"Não terceirizo a atenção ao detalhe."',
+];
+
+let manifestoIndex = 0;
+
+if (manifestoEl) {
+    manifestoEl.addEventListener('click', () => {
+        // Flash opacity to mask the text swap (feels instant, not jarring)
+        manifestoEl.classList.add('text-flash');
+
+        setTimeout(() => {
+            manifestoIndex = (manifestoIndex + 1) % manifestoQuotes.length;
+            manifestoEl.textContent = manifestoQuotes[manifestoIndex];
+            manifestoEl.classList.remove('text-flash');
+        }, 120);
+
+        // Hide the "clique para mudar" hint permanently after first use
+        if (heroBlueprintEl) {
+            heroBlueprintEl.classList.add('manifesto-hint-used');
+        }
+    });
+}
+
+
 const nameSpans = document.querySelectorAll('.hero-name-span');
 const heroSubtitle = document.querySelector('.hero-subtitle');
 const glitchZone = document.getElementById('hero-glitch-zone');
