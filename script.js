@@ -111,9 +111,12 @@ window.addEventListener('mousemove', (e) => {
 // Bind magnetic hover effects only on devices supporting hover pointers (prevents mobile sticky tap states)
 if (window.matchMedia('(hover: hover)').matches) {
     magnetics.forEach((el) => {
+        // Buttons and links: scale-only hover, NO x/y translation (preserves click hitbox)
+        const isClickable = el.matches('a, button, [role="button"]');
+
         el.addEventListener('mouseenter', () => {
             if (cursor) cursor.classList.add('active');
-            gsap.to(el, { scale: 1.03, duration: 0.3, ease: 'power3.out' });
+            gsap.to(el, { scale: 1.04, duration: 0.3, ease: 'power3.out' });
         });
         
         el.addEventListener('mouseleave', () => {
@@ -126,28 +129,25 @@ if (window.matchMedia('(hover: hover)').matches) {
         });
 
         el.addEventListener('mouseup', () => {
-            gsap.to(el, { scale: 1.03, duration: 0.3, ease: 'power3.out' });
+            gsap.to(el, { scale: 1.04, duration: 0.3, ease: 'power3.out' });
         });
 
-        el.addEventListener('mousemove', (e) => {
-            const rect = el.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            
-            const distX = e.clientX - centerX;
-            const distY = e.clientY - centerY;
-            
-            // Dynamic magnetic spring physics
-            const magneticPullX = distX * 0.35; 
-            const magneticPullY = distY * 0.35;
-            
-            gsap.to(el, {
-                x: magneticPullX,
-                y: magneticPullY,
-                duration: 0.4,
-                ease: "power2.out"
+        // Only non-clickable decorative elements get the full magnetic x/y pull
+        if (!isClickable) {
+            el.addEventListener('mousemove', (e) => {
+                const rect = el.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const distX = e.clientX - centerX;
+                const distY = e.clientY - centerY;
+                gsap.to(el, {
+                    x: distX * 0.35,
+                    y: distY * 0.35,
+                    duration: 0.4,
+                    ease: "power2.out"
+                });
             });
-        });
+        }
     });
 }
 
