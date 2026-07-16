@@ -146,7 +146,11 @@ h1, h2, h3, .title-massive, .title-huge, .title-large {
 
 .title-massive {
     font-size: var(--title-hero);
-    margin-bottom: clamp(1.5rem, 3.5vw, 3rem);
+    margin-bottom: 0;
+}
+/* Hero specifically: subtitle sits flush below the name */
+.hero .title-massive {
+    margin-bottom: 0;
 }
 .title-large {
     font-size: var(--title-section);
@@ -486,6 +490,21 @@ main {
     padding: var(--space-xl);
     background: rgba(255, 255, 255, 0.02);
     max-width: 480px;
+}
+
+.hero-cta-quote {
+    font-family: var(--font-oswald);
+    font-size: clamp(1.6rem, 2.2vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    margin: 0 0 var(--space-xl) 0;
+}
+.hero-cta-quote br {
+    display: block;
+    content: "";
 }
 .manifesto-text {
     font-size: clamp(1.05rem, 1.3vw, 1.35rem);
