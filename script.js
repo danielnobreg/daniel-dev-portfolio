@@ -163,69 +163,54 @@ function initScrollAnimation() {
 
     if (window.innerWidth > 1024 && scrollContainer && panels.length > 0) {
         // Reset properties to initial zoom states before building the timeline
-        gsap.set(panels, { opacity: 0, scale: 2, rotate: 0, pointerEvents: "none", zIndex: 1 });
+        gsap.set(panels, { opacity: 0, scale: 1, xPercent: 0, yPercent: 0, rotate: 0, pointerEvents: "none", zIndex: 1 });
         gsap.set(panels[0], { opacity: 1, scale: 1, pointerEvents: "auto", zIndex: 2 });
 
         const tl = gsap.timeline();
 
-        // 1. Hero (0) -> About (1)
-        tl.to("#home", { scale: 0.5, opacity: 0, rotate: -4, pointerEvents: "none", duration: 1 })
-          .fromTo("#about", 
-              { scale: 2, opacity: 0, rotate: 4, pointerEvents: "none" },
-              { scale: 1, opacity: 1, rotate: 0, pointerEvents: "auto", duration: 1 },
-              "<"
-          );
+        // 1. Hero (0) -> About (1) [HORIZONTAL SLIDE LEFT]
+        tl.set("#about", { xPercent: 100, opacity: 1, zIndex: 3 })
+          .to("#home", { xPercent: -100, pointerEvents: "none", duration: 1 })
+          .to("#about", { xPercent: 0, pointerEvents: "auto", duration: 1 }, "<")
+          .fromTo("#about .about-image", { rotate: -8 }, { rotate: 4, duration: 1 }, "<");
 
-        // 2. About (1) -> Stacks (2)
+        // 2. About (1) -> Stacks (2) [3D ZOOM DEEP DIVE]
         tl.to("#about", { scale: 0.5, opacity: 0, rotate: 4, pointerEvents: "none", duration: 1 })
           .fromTo("#stacks", 
-              { scale: 2, opacity: 0, rotate: -4, pointerEvents: "none" },
+              { scale: 2, opacity: 0, rotate: -4, pointerEvents: "none", zIndex: 4 },
               { scale: 1, opacity: 1, rotate: 0, pointerEvents: "auto", duration: 1 },
               "<"
-          );
-        // Animate profile image rotation dynamically during about transition
-        tl.fromTo("#about .about-image", { rotate: -8 }, { rotate: 4, duration: 1 }, "-=1");
+          )
+          .fromTo("#stacks .bento-cell", { scale: 0.7 }, { scale: 1, stagger: 0.05, duration: 1 }, "<");
 
-        // 3. Stacks (2) -> Project 1 (3)
-        tl.to("#stacks", { scale: 0.5, opacity: 0, rotate: -4, pointerEvents: "none", duration: 1 })
-          .fromTo("#proj-1", 
-              { scale: 2, opacity: 0, rotate: 4, pointerEvents: "none" },
-              { scale: 1, opacity: 1, rotate: 0, pointerEvents: "auto", duration: 1 },
-              "<"
-          );
-        // Bento cells stagger scale inside stack transition
-        tl.fromTo("#stacks .bento-cell", { scale: 0.7 }, { scale: 1, stagger: 0.05, duration: 1 }, "-=1");
+        // 3. Stacks (2) -> Project 1 (3) [VERTICAL LIFT UP]
+        tl.set("#proj-1", { yPercent: 100, opacity: 1, zIndex: 5 })
+          .to("#stacks", { yPercent: -100, pointerEvents: "none", duration: 1 })
+          .to("#proj-1", { yPercent: 0, pointerEvents: "auto", duration: 1 }, "<")
+          .fromTo("#proj-1 .project-visual", { scale: 0.8 }, { scale: 1.08, duration: 1 }, "<")
+          .fromTo("#proj-1 .project-info", { y: 100 }, { y: -100, duration: 1 }, "<");
 
-        // 4. Project 1 (3) -> Project 2 (4)
-        tl.to("#proj-1", { scale: 0.5, opacity: 0, rotate: 4, pointerEvents: "none", duration: 1 })
+        // 4. Project 1 (3) -> Project 2 (4) [3D ZOOM DEEP DIVE]
+        tl.to("#proj-1", { scale: 0.5, opacity: 0, rotate: -4, pointerEvents: "none", duration: 1 })
           .fromTo("#proj-2", 
-              { scale: 2, opacity: 0, rotate: -4, pointerEvents: "none" },
+              { scale: 2, opacity: 0, rotate: 4, pointerEvents: "none", zIndex: 6 },
               { scale: 1, opacity: 1, rotate: 0, pointerEvents: "auto", duration: 1 },
               "<"
-          );
-        // Local project visual zoom and parallax info shifts
-        tl.fromTo("#proj-1 .project-visual", { scale: 0.8 }, { scale: 1.08, duration: 1 }, "-=2");
-        tl.fromTo("#proj-1 .project-info", { y: 100 }, { y: -100, duration: 1 }, "-=2");
+          )
+          .fromTo("#proj-2 .project-visual", { scale: 0.8 }, { scale: 1.08, duration: 1 }, "<")
+          .fromTo("#proj-2 .project-info", { y: 100 }, { y: -100, duration: 1 }, "<");
 
-        // 5. Project 2 (4) -> Project 3 (5)
-        tl.to("#proj-2", { scale: 0.5, opacity: 0, rotate: -4, pointerEvents: "none", duration: 1 })
-          .fromTo("#proj-3", 
-              { scale: 2, opacity: 0, rotate: 4, pointerEvents: "none" },
-              { scale: 1, opacity: 1, rotate: 0, pointerEvents: "auto", duration: 1 },
-              "<"
-          );
-        tl.fromTo("#proj-2 .project-visual", { scale: 0.8 }, { scale: 1.08, duration: 1 }, "-=2");
-        tl.fromTo("#proj-2 .project-info", { y: 100 }, { y: -100, duration: 1 }, "-=2");
+        // 5. Project 2 (4) -> Project 3 (5) [HORIZONTAL SLIDE LEFT]
+        tl.set("#proj-3", { xPercent: 100, opacity: 1, zIndex: 7 })
+          .to("#proj-2", { xPercent: -100, pointerEvents: "none", duration: 1 })
+          .to("#proj-3", { xPercent: 0, pointerEvents: "auto", duration: 1 }, "<")
+          .fromTo("#proj-3 .project-visual", { scale: 0.8 }, { scale: 1.08, duration: 1 }, "<")
+          .fromTo("#proj-3 .project-info", { y: 100 }, { y: -100, duration: 1 }, "<");
 
-        // 6. Project 3 (5) -> Contact (6)
-        tl.to("#proj-3", { scale: 0.5, opacity: 0, rotate: 4, pointerEvents: "none", duration: 1 })
-          .fromTo("#contact", 
-              { scale: 2, opacity: 0, rotate: -4, pointerEvents: "none" },
-              { scale: 1, opacity: 1, rotate: 0, pointerEvents: "auto", duration: 1 },
-              "<"
-          );
-        tl.fromTo("#proj-3 .project-visual", { scale: 0.8 }, { scale: 1.08, duration: 1 }, "-=2");
-        tl.fromTo("#proj-3 .project-info", { y: 100 }, { y: -100, duration: 1 }, "-=2");
+        // 6. Project 3 (5) -> Contact (6) [VERTICAL LIFT UP]
+        tl.set("#contact", { yPercent: 100, opacity: 1, zIndex: 8 })
+          .to("#proj-3", { yPercent: -100, pointerEvents: "none", duration: 1 })
+          .to("#contact", { yPercent: 0, pointerEvents: "auto", duration: 1 }, "<");
 
         // Create the master ScrollTrigger to control the zoom timeline
         scrollTriggerInstance = ScrollTrigger.create({
@@ -242,7 +227,7 @@ function initScrollAnimation() {
         });
     } else {
         // Reset element styles to default vertical scroll configs on mobile
-        gsap.set(panels, { opacity: 1, scale: 1, rotate: 0, pointerEvents: "auto", zIndex: "auto" });
+        gsap.set(panels, { opacity: 1, scale: 1, xPercent: 0, yPercent: 0, rotate: 0, pointerEvents: "auto", zIndex: "auto" });
         gsap.set("#about .about-image", { rotate: -2, scale: 1 });
         gsap.set("#stacks .bento-cell", { scale: 1 });
         gsap.set(".project-visual", { scale: 1 });
