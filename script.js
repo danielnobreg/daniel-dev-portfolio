@@ -169,31 +169,21 @@ function initScrollAnimation() {
     }
 
     if (window.innerWidth > 1024 && horizontalWrapper && panels.length > 0) {
-        // Compute travel distance
-        const totalPanX = -100 * (panels.length - 1);
-        
+        // Pin projects container and translate horizontal wrapper
         scrollTriggerInstance = ScrollTrigger.create({
-            trigger: horizontalWrapper,
+            trigger: "#projects",
             pin: true,
             scrub: 1,
-            // Horizontal panning matches wrapper width
-            end: () => "+=" + horizontalWrapper.offsetWidth,
-            animation: gsap.to(panels, {
-                xPercent: totalPanX,
+            start: "top top",
+            end: () => "+=" + (horizontalWrapper.scrollWidth - window.innerWidth),
+            animation: gsap.to(horizontalWrapper, {
+                x: () => -(horizontalWrapper.scrollWidth - window.innerWidth),
                 ease: "none"
             }),
-            snap: {
-                snapTo: 1 / (panels.length - 1),
-                duration: { min: 0.2, max: 0.5 },
-                delay: 0.1,
-                ease: "power2.inOut"
-            },
-            onUpdate: self => {
-                checkActivePanel(self.progress);
-            }
+            invalidateOnRefresh: true
         });
 
-        // 1. ABOUT PANEL SCROLL ANIMATIONS (Profile image organic rotation & translation)
+        // 1. ABOUT PANEL SCROLL ANIMATIONS (Profile image organic rotation & translation on vertical scroll)
         gsap.fromTo("#about .about-image", 
             { rotate: -8, scale: 0.85 },
             {
@@ -201,9 +191,8 @@ function initScrollAnimation() {
                 scale: 1.05,
                 scrollTrigger: {
                     trigger: "#about",
-                    containerAnimation: scrollTriggerInstance.animation,
-                    start: "left right",
-                    end: "right left",
+                    start: "top bottom",
+                    end: "bottom top",
                     scrub: true
                 }
             }
@@ -215,15 +204,14 @@ function initScrollAnimation() {
                 opacity: 1,
                 scrollTrigger: {
                     trigger: "#about",
-                    containerAnimation: scrollTriggerInstance.animation,
-                    start: "left right",
-                    end: "right left",
+                    start: "top bottom",
+                    end: "bottom top",
                     scrub: true
                 }
             }
         );
 
-        // 2. STACKS PANEL ANIMATIONS (Bento cells stagger scale-in zoom)
+        // 2. STACKS PANEL ANIMATIONS (Bento cells stagger scale-in zoom on vertical scroll)
         gsap.fromTo("#stacks .bento-cell",
             { scale: 0.75, opacity: 0.2, rotate: -2 },
             {
@@ -233,19 +221,17 @@ function initScrollAnimation() {
                 stagger: 0.05,
                 scrollTrigger: {
                     trigger: "#stacks",
-                    containerAnimation: scrollTriggerInstance.animation,
-                    start: "left right",
+                    start: "top bottom",
                     end: "center center",
                     scrub: true
                 }
             }
         );
 
-        // 3. PROJECTS SCROLL INTERACTIONS (Scale zoom and vertical parallax text flow)
-        const projectPanels = ["#projects", "#project-taskflow", "#project-rodizzio"];
-        projectPanels.forEach((selector) => {
-            const visual = document.querySelector(`${selector} .project-visual`);
-            const info = document.querySelector(`${selector} .project-info`);
+        // 3. PROJECTS SCROLL INTERACTIONS (Scale zoom and vertical parallax text flow on horizontal scroll)
+        panels.forEach((panel) => {
+            const visual = panel.querySelector(`.project-visual`);
+            const info = panel.querySelector(`.project-info`);
             
             if (visual) {
                 gsap.fromTo(visual,
@@ -254,7 +240,7 @@ function initScrollAnimation() {
                         scale: 1.08,
                         rotate: 2,
                         scrollTrigger: {
-                            trigger: selector,
+                            trigger: panel,
                             containerAnimation: scrollTriggerInstance.animation,
                             start: "left right",
                             end: "right left",
@@ -271,7 +257,7 @@ function initScrollAnimation() {
                         y: -100,
                         opacity: 1,
                         scrollTrigger: {
-                            trigger: selector,
+                            trigger: panel,
                             containerAnimation: scrollTriggerInstance.animation,
                             start: "left right",
                             end: "right left",
@@ -283,7 +269,7 @@ function initScrollAnimation() {
         });
     } else {
         // Reset panels translation and animation states on mobile viewports
-        gsap.set(panels, { xPercent: 0 });
+        gsap.set(horizontalWrapper, { x: 0 });
         gsap.set("#about .about-image", { rotate: -2, scale: 1 });
         gsap.set("#about .about-desc", { y: 0, opacity: 1 });
         gsap.set("#stacks .bento-cell", { scale: 1, opacity: 1, rotate: 0 });
@@ -292,91 +278,44 @@ function initScrollAnimation() {
     }
 }
 
-// Map Snap progress to navigation link highlighting
-function checkActivePanel(progress) {
-    const navLinks = document.querySelectorAll('.nav-center .nav-link');
-    const segment = 1 / (panels.length - 1);
-    const activeIndex = Math.min(
-        panels.length - 1,
-        Math.max(0, Math.round(progress / segment))
-    );
-
-    navLinks.forEach((link, idx) => {
-        link.classList.remove('active');
-        if (idx === activeIndex || (activeIndex >= 3 && activeIndex <= 5 && idx === 3) || (activeIndex === 6 && idx === 4)) {
-            // Projects are panels 3, 4, 5. Contact is panel 6.
-            if (idx === 3 && activeIndex >= 3 && activeIndex <= 5) {
-                link.classList.add('active');
-            } else if (idx === 4 && activeIndex === 6) {
-                link.classList.add('active');
-            } else if (idx === idx && activeIndex === idx) {
-                link.classList.add('active');
-            }
-        }
-    });
-}
-
 // Initial load
 window.addEventListener("load", initScrollAnimation);
 window.addEventListener("resize", initScrollAnimation);
 
-// Active Scrollspy Navbar for Mobile
-function checkActiveSectionMobile() {
-    if (window.innerWidth <= 1024) {
-        const sections = document.querySelectorAll('section');
-        const navLinks = document.querySelectorAll('.nav-center .nav-link');
-        let current = '';
+// Active Scrollspy Navbar for both Desktop & Mobile (based on vertical elements)
+function checkActiveSection() {
+    const sections = document.querySelectorAll('main > section');
+    const navLinks = document.querySelectorAll('.nav-center .nav-link');
+    let current = '';
 
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            if (window.scrollY >= (sectionTop - sectionHeight / 3)) {
-                current = section.getAttribute('id');
-            }
-        });
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (window.scrollY >= (sectionTop - sectionHeight / 3)) {
+            current = section.getAttribute('id');
+        }
+    });
 
-        navLinks.forEach(li => {
-            li.classList.remove('active');
-            if (li.getAttribute('href').includes(current)) {
-                li.classList.add('active');
-            }
-        });
-    }
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').includes(current)) {
+            link.classList.add('active');
+        }
+    });
 }
-window.addEventListener('scroll', checkActiveSectionMobile);
+window.addEventListener('scroll', checkActiveSection);
 
 // Scroll smooth action on navbar click
 const navLinks = document.querySelectorAll('.nav-center .nav-link');
-navLinks.forEach((link, idx) => {
+navLinks.forEach((link) => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
         const targetId = link.getAttribute('href');
-        
-        if (window.innerWidth > 1024 && scrollTriggerInstance) {
-            // Resolve section scroll mapping:
-            // Home (idx 0) -> 0%
-            // Sobre (idx 1) -> 1/6 progress
-            // Stacks (idx 2) -> 2/6 progress
-            // Projetos (idx 3) -> 3/6 progress (takes panel index 3)
-            // Contato (idx 4) -> 6/6 progress (takes panel index 6)
-            let targetPanelIdx = idx;
-            if (idx === 3) targetPanelIdx = 3; // First project iXamina
-            if (idx === 4) targetPanelIdx = 6; // Contact Form
-            
-            const targetScrollY = scrollTriggerInstance.start + 
-                (targetPanelIdx / (panels.length - 1)) * (scrollTriggerInstance.end - scrollTriggerInstance.start);
-            
-            lenis.scrollTo(targetScrollY, {
-                duration: 1.5,
-                ease: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-            });
-        } else {
-            lenis.scrollTo(targetId, {
-                offset: -100,
-                duration: 1.5,
-                ease: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-            });
-        }
+        lenis.scrollTo(targetId, {
+            offset: 0,
+            duration: 1.5,
+            ease: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+        });
     });
 });
 
