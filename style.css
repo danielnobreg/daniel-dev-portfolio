@@ -742,3 +742,26 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
+/* Accessibility reduced motion fallback overrides */
+.reduced-motion #scroll-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+.reduced-motion .panel {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: 100%;
+    min-height: 100dvh;
+    height: auto;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    flex-shrink: 1;
+    padding: var(--space-xl) var(--space-lg);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: auto !important;
+}
