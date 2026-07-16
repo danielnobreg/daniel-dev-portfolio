@@ -175,64 +175,68 @@ function initScrollAnimation() {
 
         const tl = gsap.timeline();
 
+        // Safety: ensure all panels are invisible and cannot intercept events at start
+        gsap.set(panels.slice(1), { opacity: 0, pointerEvents: "none", zIndex: 1 });
+
         // 1. Hero (0) -> About (1) [HORIZONTAL SLIDE LEFT]
-        tl.set("#about", { xPercent: 100, opacity: 1, zIndex: 3 })
-          .to("#home", { xPercent: -100, pointerEvents: "none", duration: 1 })
-          .to("#about", { xPercent: 0, pointerEvents: "auto", duration: 1 }, "<")
+        tl.set("#about", { xPercent: 100, opacity: 1, zIndex: 3, pointerEvents: "none" })
+          .to("#home", { xPercent: -100, pointerEvents: "none", duration: 1, ease: "power2.inOut" })
+          .to("#about", { xPercent: 0, pointerEvents: "auto", duration: 1, ease: "power2.inOut" }, "<")
           .fromTo("#about .about-image", { rotate: -8 }, { rotate: 4, duration: 1 }, "<");
 
         // 2. About (1) -> Stacks (2) [3D ZOOM DEEP DIVE]
-        tl.to("#about", { scale: 0.5, opacity: 0, rotate: 4, pointerEvents: "none", duration: 1 })
-          .fromTo("#stacks", 
-              { scale: 2, opacity: 0, rotate: -4, pointerEvents: "none", zIndex: 4 },
-              { scale: 1, opacity: 1, rotate: 0, pointerEvents: "auto", duration: 1 },
+        // #stacks starts at zIndex:1 so cannot overlap #about while it's transitioning out
+        tl.set("#stacks", { scale: 2, opacity: 0, rotate: -4, pointerEvents: "none", zIndex: 2 })
+          .to("#about", { scale: 0.5, opacity: 0, rotate: 4, pointerEvents: "none", duration: 1, ease: "power2.inOut" })
+          .to("#stacks", 
+              { scale: 1, opacity: 1, rotate: 0, pointerEvents: "auto", zIndex: 4, duration: 1, ease: "power2.inOut" },
               "<"
           )
           .fromTo("#stacks .bento-cell", { scale: 0.7 }, { scale: 1, stagger: 0.05, duration: 1 }, "<");
 
         // 3. Stacks (2) -> Project 1 (3) [VERTICAL LIFT UP]
-        tl.set("#proj-1", { yPercent: 100, opacity: 1, zIndex: 5 })
-          .to("#stacks", { yPercent: -100, pointerEvents: "none", duration: 1 })
-          .to("#proj-1", { yPercent: 0, pointerEvents: "auto", duration: 1 }, "<")
+        tl.set("#proj-1", { yPercent: 100, opacity: 1, zIndex: 3, pointerEvents: "none" })
+          .to("#stacks", { yPercent: -100, pointerEvents: "none", duration: 1, ease: "power2.inOut" })
+          .to("#proj-1", { yPercent: 0, pointerEvents: "auto", zIndex: 5, duration: 1, ease: "power2.inOut" }, "<")
           .fromTo("#proj-1 .project-visual", { scale: 0.8 }, { scale: 1.08, duration: 1 }, "<")
-          .fromTo("#proj-1 .project-info", { y: 100 }, { y: -100, duration: 1 }, "<");
+          .fromTo("#proj-1 .project-info", { y: 60 }, { y: -60, duration: 1 }, "<");
 
         // 4. Project 1 (3) -> Project 2 (4) [3D ZOOM DEEP DIVE]
-        tl.to("#proj-1", { scale: 0.5, opacity: 0, rotate: -4, pointerEvents: "none", duration: 1 })
-          .fromTo("#proj-2", 
-              { scale: 2, opacity: 0, rotate: 4, pointerEvents: "none", zIndex: 6 },
-              { scale: 1, opacity: 1, rotate: 0, pointerEvents: "auto", duration: 1 },
+        tl.set("#proj-2", { scale: 2, opacity: 0, rotate: 4, pointerEvents: "none", zIndex: 3 })
+          .to("#proj-1", { scale: 0.5, opacity: 0, rotate: -4, pointerEvents: "none", duration: 1, ease: "power2.inOut" })
+          .to("#proj-2", 
+              { scale: 1, opacity: 1, rotate: 0, pointerEvents: "auto", zIndex: 6, duration: 1, ease: "power2.inOut" },
               "<"
           )
           .fromTo("#proj-2 .project-visual", { scale: 0.8 }, { scale: 1.08, duration: 1 }, "<")
-          .fromTo("#proj-2 .project-info", { y: 100 }, { y: -100, duration: 1 }, "<");
+          .fromTo("#proj-2 .project-info", { y: 60 }, { y: -60, duration: 1 }, "<");
 
         // 5. Project 2 (4) -> Project 3 (5) [HORIZONTAL SLIDE LEFT]
-        tl.set("#proj-3", { xPercent: 100, opacity: 1, zIndex: 7 })
-          .to("#proj-2", { xPercent: -100, pointerEvents: "none", duration: 1 })
-          .to("#proj-3", { xPercent: 0, pointerEvents: "auto", duration: 1 }, "<")
+        tl.set("#proj-3", { xPercent: 100, opacity: 1, zIndex: 3, pointerEvents: "none" })
+          .to("#proj-2", { xPercent: -100, pointerEvents: "none", duration: 1, ease: "power2.inOut" })
+          .to("#proj-3", { xPercent: 0, pointerEvents: "auto", zIndex: 7, duration: 1, ease: "power2.inOut" }, "<")
           .fromTo("#proj-3 .project-visual", { scale: 0.8 }, { scale: 1.08, duration: 1 }, "<")
-          .fromTo("#proj-3 .project-info", { y: 100 }, { y: -100, duration: 1 }, "<");
+          .fromTo("#proj-3 .project-info", { y: 60 }, { y: -60, duration: 1 }, "<");
 
         // 6. Project 3 (5) -> Contact (6) [VERTICAL LIFT UP]
-        tl.set("#contact", { yPercent: 100, opacity: 1, zIndex: 8 })
-          .to("#proj-3", { yPercent: -100, pointerEvents: "none", duration: 1 })
-          .to("#contact", { yPercent: 0, pointerEvents: "auto", duration: 1 }, "<");
+        tl.set("#contact", { yPercent: 100, opacity: 1, zIndex: 3, pointerEvents: "none" })
+          .to("#proj-3", { yPercent: -100, pointerEvents: "none", duration: 1, ease: "power2.inOut" })
+          .to("#contact", { yPercent: 0, pointerEvents: "auto", zIndex: 8, duration: 1, ease: "power2.inOut" }, "<");
 
         // Create the master ScrollTrigger to control the zoom timeline
         scrollTriggerInstance = ScrollTrigger.create({
             trigger: "#scroll-container",
             pin: true,
-            scrub: 1,
+            scrub: 1.5,
             start: "top top",
             end: "+=600%",
             animation: tl,
             invalidateOnRefresh: true,
             snap: {
                 snapTo: 1 / 6,
-                duration: { min: 0.4, max: 0.8 },
-                delay: 0.1, // dead zone trigger delay
-                ease: "power2.out"
+                duration: { min: 0.5, max: 1.2 },
+                delay: 0.6,  // wider dead zone — user must pause before snap commits
+                ease: "power2.inOut"
             },
             onUpdate: self => {
                 checkActivePanel(self.progress);
