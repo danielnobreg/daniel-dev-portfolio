@@ -378,8 +378,8 @@ function setLanguage(lang) {
     document.documentElement.setAttribute('lang', lang === 'pt' ? 'pt-BR' : 'en-US');
     
     setTimeout(() => {
-        ScrollTrigger.refresh();
         initScrollAnimation();
+        ScrollTrigger.refresh();
     }, 150);
 }
 
@@ -388,3 +388,6 @@ if(langEnBtn) langEnBtn.addEventListener('click', () => setLanguage('en'));
 
 const savedLang = localStorage.getItem('lang') || 'pt';
 setLanguage(savedLang);
+
+window.addEventListener("load", initScrollAnimation);
+window.addEventListener("resize", initScrollAnimation);
