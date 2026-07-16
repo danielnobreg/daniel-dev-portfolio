@@ -92,6 +92,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 const cursor = document.querySelector('.cursor');
 const magnetics = document.querySelectorAll('[data-magnetic]');
+const navLinks = document.querySelectorAll('.nav-center .nav-link');
+const scrollContainer = document.getElementById("scroll-container");
+const panels = gsap.utils.toArray("#scroll-container > .panel");
+let scrollTriggerInstance;
 
 const xTo = gsap.quickTo(cursor, "x", {duration: 0.15, ease: "power3"});
 const yTo = gsap.quickTo(cursor, "y", {duration: 0.15, ease: "power3"});
@@ -104,53 +108,52 @@ window.addEventListener('mousemove', (e) => {
     }
 });
 
-magnetics.forEach((el) => {
-    el.addEventListener('mouseenter', () => {
-        if (cursor) cursor.classList.add('active');
-        gsap.to(el, { scale: 1.03, duration: 0.3, ease: 'power3.out' });
-    });
-    
-    el.addEventListener('mouseleave', () => {
-        if (cursor) cursor.classList.remove('active');
-        gsap.to(el, { x: 0, y: 0, scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
-    });
-
-    el.addEventListener('mousedown', () => {
-        gsap.to(el, { scale: 0.96, duration: 0.1, ease: 'power3.out' });
-    });
-
-    el.addEventListener('mouseup', () => {
-        gsap.to(el, { scale: 1.03, duration: 0.3, ease: 'power3.out' });
-    });
-
-    el.addEventListener('mousemove', (e) => {
-        const rect = el.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
+// Bind magnetic hover effects only on devices supporting hover pointers (prevents mobile sticky tap states)
+if (window.matchMedia('(hover: hover)').matches) {
+    magnetics.forEach((el) => {
+        el.addEventListener('mouseenter', () => {
+            if (cursor) cursor.classList.add('active');
+            gsap.to(el, { scale: 1.03, duration: 0.3, ease: 'power3.out' });
+        });
         
-        const distX = e.clientX - centerX;
-        const distY = e.clientY - centerY;
-        
-        // Dynamic magnetic spring physics
-        const magneticPullX = distX * 0.35; 
-        const magneticPullY = distY * 0.35;
-        
-        gsap.to(el, {
-            x: magneticPullX,
-            y: magneticPullY,
-            duration: 0.4,
-            ease: "power2.out"
+        el.addEventListener('mouseleave', () => {
+            if (cursor) cursor.classList.remove('active');
+            gsap.to(el, { x: 0, y: 0, scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
+        });
+
+        el.addEventListener('mousedown', () => {
+            gsap.to(el, { scale: 0.96, duration: 0.1, ease: 'power3.out' });
+        });
+
+        el.addEventListener('mouseup', () => {
+            gsap.to(el, { scale: 1.03, duration: 0.3, ease: 'power3.out' });
+        });
+
+        el.addEventListener('mousemove', (e) => {
+            const rect = el.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            const distX = e.clientX - centerX;
+            const distY = e.clientY - centerY;
+            
+            // Dynamic magnetic spring physics
+            const magneticPullX = distX * 0.35; 
+            const magneticPullY = distY * 0.35;
+            
+            gsap.to(el, {
+                x: magneticPullX,
+                y: magneticPullY,
+                duration: 0.4,
+                ease: "power2.out"
+            });
         });
     });
-});
+}
 
 // ==========================================================
 // 3. GSAP HORIZONTAL PAN & DYNAMIC SCROLL ANIMATIONS
 // ==========================================================
-const scrollContainer = document.getElementById("scroll-container");
-const panels = gsap.utils.toArray("#scroll-container > .panel");
-let scrollTriggerInstance;
-
 lenis.on('scroll', ScrollTrigger.update);
 gsap.ticker.add((time) => {
   lenis.raf(time * 1000);
@@ -161,7 +164,11 @@ function initScrollAnimation() {
     // Clean up all existing ScrollTriggers to prevent leaks on resize
     ScrollTrigger.getAll().forEach(t => t.kill());
 
-    if (scrollContainer && panels.length > 0) {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (scrollContainer && panels.length > 0 && !prefersReducedMotion) {
+        document.body.classList.remove("reduced-motion");
+        
         // Reset properties to initial zoom states before building the timeline
         gsap.set(panels, { opacity: 0, scale: 1, xPercent: 0, yPercent: 0, rotate: 0, pointerEvents: "none", zIndex: 1 });
         gsap.set(panels[0], { opacity: 1, scale: 1, pointerEvents: "auto", zIndex: 2 });
@@ -231,12 +238,19 @@ function initScrollAnimation() {
                 checkActivePanel(self.progress);
             }
         });
+    } else {
+        // Fallback layout for prefers-reduced-motion or missing containers
+        document.body.classList.add("reduced-motion");
+        gsap.set(panels, { opacity: 1, scale: 1, xPercent: 0, yPercent: 0, rotate: 0, pointerEvents: "auto", zIndex: "auto" });
+        gsap.set("#about .about-image", { rotate: -2, scale: 1 });
+        gsap.set("#stacks .bento-cell", { scale: 1 });
+        gsap.set(".project-visual", { scale: 1 });
+        gsap.set(".project-info", { y: 0 });
     }
 }
 
-// Highlight navbar links based on 3D transition state progress
+// Highlight navbar links based on 3D transition state progress (uses globally cached elements)
 function checkActivePanel(progress) {
-    const navLinks = document.querySelectorAll('.nav-center .nav-link');
     const activeState = Math.min(6, Math.max(0, Math.round(progress * 6)));
     
     let linkIndexToHighlight = 0;
@@ -255,9 +269,9 @@ function checkActivePanel(progress) {
     });
 }
 
-// Scroll smooth action on navbar click (links + logo)
-const navLinks = document.querySelectorAll('.logo, .nav-center .nav-link');
-navLinks.forEach((link) => {
+// Scroll smooth action on navbar click (links + logo, uses globally cached elements)
+const navTriggerButtons = document.querySelectorAll('.logo, .nav-center .nav-link');
+navTriggerButtons.forEach((link) => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
         
@@ -265,7 +279,7 @@ navLinks.forEach((link) => {
             let targetState = 0; // Default to home for logo
             
             if (link.classList.contains('nav-link')) {
-                const linkArray = Array.from(document.querySelectorAll('.nav-center .nav-link'));
+                const linkArray = Array.from(navLinks);
                 const idx = linkArray.indexOf(link);
                 targetState = idx;
                 if (idx === 3) targetState = 3; // First project
