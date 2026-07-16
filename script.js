@@ -221,6 +221,12 @@ function initScrollAnimation() {
             end: "+=600%",
             animation: tl,
             invalidateOnRefresh: true,
+            snap: {
+                snapTo: 1 / 6,
+                duration: { min: 0.4, max: 0.8 },
+                delay: 0.1, // dead zone trigger delay
+                ease: "power2.out"
+            },
             onUpdate: self => {
                 checkActivePanel(self.progress);
             }
@@ -249,16 +255,22 @@ function checkActivePanel(progress) {
     });
 }
 
-// Scroll smooth action on navbar click
-const navLinks = document.querySelectorAll('.nav-center .nav-link');
-navLinks.forEach((link, idx) => {
+// Scroll smooth action on navbar click (links + logo)
+const navLinks = document.querySelectorAll('.logo, .nav-center .nav-link');
+navLinks.forEach((link) => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
         
         if (scrollTriggerInstance) {
-            let targetState = idx;
-            if (idx === 3) targetState = 3; // First project proj-1
-            if (idx === 4) targetState = 6; // Contact Form
+            let targetState = 0; // Default to home for logo
+            
+            if (link.classList.contains('nav-link')) {
+                const linkArray = Array.from(document.querySelectorAll('.nav-center .nav-link'));
+                const idx = linkArray.indexOf(link);
+                targetState = idx;
+                if (idx === 3) targetState = 3; // First project
+                if (idx === 4) targetState = 6; // Contact Form
+            }
             
             const targetScrollY = scrollTriggerInstance.start + 
                 (targetState / 6) * (scrollTriggerInstance.end - scrollTriggerInstance.start);
@@ -270,6 +282,25 @@ navLinks.forEach((link, idx) => {
         }
     });
 });
+
+// Dynamic Hero Name Font Cycling (Occasional sketch vibe shifting)
+const nameSpans = document.querySelectorAll('.title-massive span');
+const fonts = [
+    "'Oswald', sans-serif",
+    "'Special Elite', cursive",
+    "'Architects Daughter', handwriting",
+    "'Permanent Marker', cursive",
+    "'Courier Prime', monospace"
+];
+
+let fontIndex = 0;
+function cycleHeroFont() {
+    fontIndex = (fontIndex + 1) % fonts.length;
+    nameSpans.forEach(span => {
+        span.style.fontFamily = fonts[fontIndex];
+    });
+}
+setInterval(cycleHeroFont, 3000);
 
 // ==========================================================
 // 4. I18N - INTERNATIONALIZATION & PREMIUM COPYWRITING
