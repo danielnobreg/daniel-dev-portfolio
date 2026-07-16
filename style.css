@@ -248,9 +248,9 @@ h1, h2, h3, .title-massive, .title-huge, .title-large {
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--text-muted);
-    margin-top: var(--space-sm);
+    margin-top: 0.15em;
     margin-bottom: 0;
-    transition: letter-spacing 0.5s ease, color 0.3s ease;
+    transition: letter-spacing 0.5s ease, color 0.3s ease, font-family 0.1s;
 }
 .glitch-active .hero-subtitle,
 #hero-glitch-zone:hover .hero-subtitle {

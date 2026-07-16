@@ -390,20 +390,14 @@ function triggerGlitchCycle() {
     }, 80); // swap font 80ms into the 240ms glitch burst
 }
 
-// Auto-cycle every 5 seconds
-glitchIntervalId = setInterval(triggerGlitchCycle, 5000);
-
-// Hover over the glitch zone also triggers a cycle (with debounce)
+// Hover-only trigger — no auto-cycle
 let hoverCooldown = false;
 if (glitchZone) {
     glitchZone.addEventListener('mouseenter', () => {
         if (hoverCooldown) return;
         hoverCooldown = true;
         triggerGlitchCycle();
-        // Reset auto-interval so hover doesn't cause double-fire shortly after
-        clearInterval(glitchIntervalId);
-        glitchIntervalId = setInterval(triggerGlitchCycle, 5000);
-        setTimeout(() => { hoverCooldown = false; }, 800);
+        setTimeout(() => { hoverCooldown = false; }, 700);
     });
 }
 
