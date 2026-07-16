@@ -303,9 +303,13 @@ navTriggerButtons.forEach((link) => {
 
 // -------------------------------------------------------
 // Shared helper: scroll to a panel by its index (0–6)
+// Retries briefly if ScrollTrigger isn't initialized yet (race condition on load)
 // -------------------------------------------------------
-function scrollToPanel(panelIndex) {
-    if (!scrollTriggerInstance) return;
+function scrollToPanel(panelIndex, attempt = 0) {
+    if (!scrollTriggerInstance) {
+        if (attempt < 10) setTimeout(() => scrollToPanel(panelIndex, attempt + 1), 100);
+        return;
+    }
     const targetScrollY = scrollTriggerInstance.start +
         (panelIndex / 6) * (scrollTriggerInstance.end - scrollTriggerInstance.start);
     lenis.scrollTo(targetScrollY, {
@@ -556,5 +560,9 @@ if(langEnBtn) langEnBtn.addEventListener('click', () => setLanguage('en'));
 const savedLang = localStorage.getItem('lang') || 'pt';
 setLanguage(savedLang);
 
-window.addEventListener("load", initScrollAnimation);
-window.addEventListener("resize", initScrollAnimation);
+// Single init entry point — setLanguage already calls initScrollAnimation
+// Resize is debounced to avoid thrashing during window drag
+window.addEventListener("resize", () => {
+    clearTimeout(window._resizeTimer);
+    window._resizeTimer = setTimeout(initScrollAnimation, 250);
+});
