@@ -301,6 +301,41 @@ navTriggerButtons.forEach((link) => {
     });
 });
 
+// -------------------------------------------------------
+// Shared helper: scroll to a panel by its index (0–6)
+// -------------------------------------------------------
+function scrollToPanel(panelIndex) {
+    if (!scrollTriggerInstance) return;
+    const targetScrollY = scrollTriggerInstance.start +
+        (panelIndex / 6) * (scrollTriggerInstance.end - scrollTriggerInstance.start);
+    lenis.scrollTo(targetScrollY, {
+        duration: 1.5,
+        ease: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+    });
+}
+
+// Map panel IDs -> timeline index
+const panelIndexMap = {
+    '#home':    0,
+    '#about':   1,
+    '#stacks':  2,
+    '#proj-1':  3,
+    '#proj-2':  4,
+    '#proj-3':  5,
+    '#contact': 6
+};
+
+// Intercept ALL anchor links that point to panel IDs (Ver Projetos, CTA, etc.)
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    const href = anchor.getAttribute('href');
+    if (panelIndexMap[href] !== undefined) {
+        anchor.addEventListener('click', (e) => {
+            e.preventDefault();
+            scrollToPanel(panelIndexMap[href]);
+        });
+    }
+});
+
 // Dynamic Hero Name Font Cycling — Glitch-style shift
 const nameSpans = document.querySelectorAll('.hero-name-span');
 const heroSubtitle = document.querySelector('.hero-subtitle');
