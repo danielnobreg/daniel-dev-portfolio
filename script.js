@@ -161,7 +161,7 @@ function initScrollAnimation() {
     // Clean up all existing ScrollTriggers to prevent leaks on resize
     ScrollTrigger.getAll().forEach(t => t.kill());
 
-    if (window.innerWidth > 1024 && scrollContainer && panels.length > 0) {
+    if (scrollContainer && panels.length > 0) {
         // Reset properties to initial zoom states before building the timeline
         gsap.set(panels, { opacity: 0, scale: 1, xPercent: 0, yPercent: 0, rotate: 0, pointerEvents: "none", zIndex: 1 });
         gsap.set(panels[0], { opacity: 1, scale: 1, pointerEvents: "auto", zIndex: 2 });
@@ -225,13 +225,6 @@ function initScrollAnimation() {
                 checkActivePanel(self.progress);
             }
         });
-    } else {
-        // Reset element styles to default vertical scroll configs on mobile
-        gsap.set(panels, { opacity: 1, scale: 1, xPercent: 0, yPercent: 0, rotate: 0, pointerEvents: "auto", zIndex: "auto" });
-        gsap.set("#about .about-image", { rotate: -2, scale: 1 });
-        gsap.set("#stacks .bento-cell", { scale: 1 });
-        gsap.set(".project-visual", { scale: 1 });
-        gsap.set(".project-info", { y: 0 });
     }
 }
 
@@ -256,41 +249,13 @@ function checkActivePanel(progress) {
     });
 }
 
-// Active Scrollspy Navbar for Mobile viewports (standard vertical scroll)
-function checkActiveSectionMobile() {
-    if (window.innerWidth <= 1024) {
-        const sections = document.querySelectorAll('main > #scroll-container > section');
-        const navLinks = document.querySelectorAll('.nav-center .nav-link');
-        let current = '';
-
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            if (window.scrollY >= (sectionTop - sectionHeight / 3)) {
-                current = section.getAttribute('id');
-            }
-        });
-
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            const href = link.getAttribute('href');
-            // Map sub project panels (proj-1, proj-2, proj-3) to 'Projetos' nav link
-            if (href.includes(current) || (current.startsWith('proj-') && href.includes('proj-1'))) {
-                link.classList.add('active');
-            }
-        });
-    }
-}
-window.addEventListener('scroll', checkActiveSectionMobile);
-
 // Scroll smooth action on navbar click
 const navLinks = document.querySelectorAll('.nav-center .nav-link');
 navLinks.forEach((link, idx) => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
-        const targetId = link.getAttribute('href');
         
-        if (window.innerWidth > 1024 && scrollTriggerInstance) {
+        if (scrollTriggerInstance) {
             let targetState = idx;
             if (idx === 3) targetState = 3; // First project proj-1
             if (idx === 4) targetState = 6; // Contact Form
@@ -299,12 +264,6 @@ navLinks.forEach((link, idx) => {
                 (targetState / 6) * (scrollTriggerInstance.end - scrollTriggerInstance.start);
             
             lenis.scrollTo(targetScrollY, {
-                duration: 1.5,
-                ease: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-            });
-        } else {
-            lenis.scrollTo(targetId, {
-                offset: -100,
                 duration: 1.5,
                 ease: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
             });
