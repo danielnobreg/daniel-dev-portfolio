@@ -240,19 +240,22 @@ h1, h2, h3, .title-massive, .title-huge, .title-large {
     width: fit-content;
     cursor: pointer;
 }
+.hero-name-span:first-child {
+    margin-bottom: 0.05em;
+}
 
 .hero-subtitle {
     font-family: var(--font-oswald);
     font-size: clamp(0.9rem, 1.3vw, 1.2rem);
-    letter-spacing: 0.22em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-muted);
-    margin-top: 0.05em;
+    margin-top: 0.35em;
     margin-bottom: 0;
     transition: letter-spacing 0.5s ease, color 0.3s ease, font-family 0.1s;
 }
 .glitch-active .hero-subtitle {
-    letter-spacing: 0.35em;
+    letter-spacing: 0.15em;
     color: var(--text-primary);
 }
 
@@ -451,7 +454,7 @@ main {
 .panel:first-child {
     opacity: 1;
     transform: scale(1);
-    pointer-events: all;
+    pointer-events: auto;
     z-index: 2;
 }
 

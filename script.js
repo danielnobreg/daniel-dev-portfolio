@@ -455,6 +455,9 @@ const translations = {
         'home.subtitle': 'Desenvolvedor Full Stack',
         'home.action': 'Ver Projetos',
         'home.manifesto': '"Escrevo código limpo. Desenho sistemas rápidos. Resolvo problemas de ponta a ponta sem firulas."',
+        'home.cta.label': 'Disponível para projetos',
+        'home.cta.quote': 'Tem uma ideia?<br>Vamos construir juntos.',
+        'home.cta.talk': 'Fala comigo',
         'about.title': 'Sobre',
         'about.desc': 'Sou desenvolvedor Full Stack. Construo APIs eficientes com Node.js e Java Spring Boot, crio frontends rápidos e responsivos com React/Next.js e automatizo infraestruturas na nuvem AWS. Meu foco é entregar software resiliente, com arquitetura limpa e performance pura, resolvendo problemas técnicos sem rodeios.',
         'about.resume': 'Currículo',
@@ -485,6 +488,9 @@ const translations = {
         'home.subtitle': 'Full Stack Developer',
         'home.action': 'View Projects',
         'home.manifesto': '"I write clean code. I build fast systems. I solve problems end-to-end without the fluff."',
+        'home.cta.label': 'Available for projects',
+        'home.cta.quote': 'Have an idea?<br>Let\'s build it together.',
+        'home.cta.talk': 'Get in touch',
         'about.title': 'About',
         'about.desc': 'I am a Full Stack developer. I build efficient APIs with Node.js and Java Spring Boot, create fast, responsive frontends with React/Next.js, and automate AWS cloud infrastructures. My focus is delivering resilient software with clean architecture and pure performance, solving technical problems straight to the point.',
         'about.resume': 'Download CV',
@@ -523,7 +529,11 @@ function setLanguage(lang) {
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if(translations[lang][key]) {
-            el.textContent = translations[lang][key];
+            if (translations[lang][key].includes('<') || el.getAttribute('data-i18n-html') !== null) {
+                el.innerHTML = translations[lang][key];
+            } else {
+                el.textContent = translations[lang][key];
+            }
         }
     });
     
