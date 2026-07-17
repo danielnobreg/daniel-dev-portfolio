@@ -151,6 +151,7 @@ h1, h2, h3, .title-massive, .title-huge, .title-large {
 /* Hero specifically: subtitle sits flush below the name */
 .hero .title-massive {
     margin-bottom: 0;
+    line-height: 1.05;
 }
 .title-large {
     font-size: var(--title-section);
@@ -241,7 +242,7 @@ h1, h2, h3, .title-massive, .title-huge, .title-large {
     cursor: pointer;
 }
 .hero-name-span:first-child {
-    margin-bottom: 0.05em;
+    margin-bottom: 0.12em;
 }
 
 .hero-subtitle {
