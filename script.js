@@ -526,16 +526,16 @@ const translations = {
     }
 };
 
-const langPtBtn = document.getElementById('lang-pt');
-const langEnBtn = document.getElementById('lang-en');
+const langPtBtns = document.querySelectorAll('#lang-pt, #lang-pt-mobile');
+const langEnBtns = document.querySelectorAll('#lang-en, #lang-en-mobile');
 
 function setLanguage(lang) {
     if(lang === 'pt') {
-        if (langPtBtn) langPtBtn.classList.add('active');
-        if (langEnBtn) langEnBtn.classList.remove('active');
+        langPtBtns.forEach(btn => btn.classList.add('active'));
+        langEnBtns.forEach(btn => btn.classList.remove('active'));
     } else {
-        if (langEnBtn) langEnBtn.classList.add('active');
-        if (langPtBtn) langPtBtn.classList.remove('active');
+        langEnBtns.forEach(btn => btn.classList.add('active'));
+        langPtBtns.forEach(btn => btn.classList.remove('active'));
     }
     
     document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -576,8 +576,8 @@ function setLanguage(lang) {
     }, 150);
 }
 
-if(langPtBtn) langPtBtn.addEventListener('click', () => setLanguage('pt'));
-if(langEnBtn) langEnBtn.addEventListener('click', () => setLanguage('en'));
+langPtBtns.forEach(btn => btn.addEventListener('click', () => setLanguage('pt')));
+langEnBtns.forEach(btn => btn.addEventListener('click', () => setLanguage('en')));
 
 const savedLang = localStorage.getItem('lang') || 'pt';
 setLanguage(savedLang);
