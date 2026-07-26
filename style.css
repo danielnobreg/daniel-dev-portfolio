@@ -310,13 +310,33 @@ h1, h2, h3, .title-massive, .title-huge, .title-large {
     background: transparent;
     mix-blend-mode: difference;
 }
-.logo {
-    font-family: var(--font-oswald);
-    font-size: var(--text-large);
+.logo-braces {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-primary);
+    text-decoration: none;
+    line-height: 1;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.3s var(--ease-out-expo);
+}
+.logo-brace {
+    font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+    font-weight: 300;
+}
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: clamp(0.75rem, 1.5vw, 0.9rem);
     font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    padding: 0.4rem 1.2rem;
+    letter-spacing: -0.01em;
+    text-transform: lowercase;
+}
+.logo-name-top, .logo-name-bottom {
+    line-height: 0.95;
 }
 .nav-center ul {
     display: flex;
@@ -908,8 +928,8 @@ footer {
     .navbar {
         padding: var(--space-md);
     }
-    .logo {
-        padding: 0.2rem 0.5rem;
+    .logo-braces {
+        padding: 0;
     }
     .nav-center {
         display: block; /* Keep links visible on mobile/tablet for navigation */

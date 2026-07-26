@@ -286,7 +286,7 @@ function checkActivePanel(progress) {
 }
 
 // Scroll smooth action on navbar click (links + logo, uses globally cached elements)
-const navTriggerButtons = document.querySelectorAll('.logo, .nav-center .nav-link');
+const navTriggerButtons = document.querySelectorAll('.logo-braces, .nav-center .nav-link');
 navTriggerButtons.forEach((link) => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
