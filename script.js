@@ -588,3 +588,31 @@ window.addEventListener("resize", () => {
     clearTimeout(window._resizeTimer);
     window._resizeTimer = setTimeout(initScrollAnimation, 250);
 });
+
+// Hamburger menu toggle logic
+const navToggle = document.querySelector('.nav-toggle');
+const navbar = document.querySelector('.navbar');
+
+if (navToggle && navbar) {
+    navToggle.addEventListener('click', () => {
+        navbar.classList.toggle('menu-active');
+        
+        // Prevent page scroll when mobile menu is open
+        if (navbar.classList.contains('menu-active')) {
+            lenis.stop();
+        } else {
+            lenis.start();
+        }
+    });
+}
+
+// Close mobile menu when clicking a link
+const navLinksMobile = document.querySelectorAll('.nav-center .nav-link');
+navLinksMobile.forEach(link => {
+    link.addEventListener('click', () => {
+        if (navbar && navbar.classList.contains('menu-active')) {
+            navbar.classList.remove('menu-active');
+            lenis.start();
+        }
+    });
+});

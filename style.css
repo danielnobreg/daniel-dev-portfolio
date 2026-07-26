@@ -387,6 +387,49 @@ h1, h2, h3, .title-massive, .title-huge, .title-large {
 .lang-toggle span.active {
     color: var(--text-primary);
 }
+.nav-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.nav-toggle {
+    display: none; /* Hidden on desktop */
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    width: 32px;
+    height: 24px;
+    position: relative;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0;
+    z-index: 101;
+    outline: none;
+}
+.hamburger-line {
+    display: block;
+    height: 2px;
+    background-color: var(--text-primary);
+    transition: transform 0.3s cubic-bezier(0.85, 0, 0.15, 1), width 0.3s cubic-bezier(0.85, 0, 0.15, 1);
+}
+.hamburger-line:first-child {
+    width: 26px;
+}
+.hamburger-line:last-child {
+    width: 16px;
+}
+
+/* Active "X" state when menu is open */
+.navbar.menu-active .nav-toggle .hamburger-line:first-child {
+    width: 26px;
+    transform: translateY(11px) rotate(45deg);
+}
+.navbar.menu-active .nav-toggle .hamburger-line:last-child {
+    width: 26px;
+    transform: translateY(-11px) rotate(-45deg);
+}
 
 /* ==================================================
    UI CONTROLS & BUTTONS
@@ -989,6 +1032,46 @@ footer {
     }
     .navbar {
         padding: 0.8rem 1.5rem;
+    }
+    .navbar.menu-active {
+        mix-blend-mode: normal !important;
+        background-color: #000000;
+    }
+    .nav-toggle {
+        display: flex;
+    }
+    .nav-center {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        background: #000000;
+        z-index: 99;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transform: translateY(-100%);
+        transition: transform 0.4s cubic-bezier(0.85, 0, 0.15, 1);
+        pointer-events: none;
+    }
+    .navbar.menu-active .nav-center {
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+    .nav-center ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 2.2rem;
+    }
+    .nav-link {
+        font-size: 2rem !important;
+        font-family: var(--font-oswald);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        opacity: 0.7;
     }
     .panel {
         padding: clamp(4.5rem, 8vh, 5.5rem) 1.5rem 1.5rem;
