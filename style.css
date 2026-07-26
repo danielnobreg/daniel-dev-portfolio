@@ -426,6 +426,7 @@ main {
     position: relative;
     width: 100vw;
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
     background: #000000;
 }
@@ -436,6 +437,7 @@ main {
     left: 0;
     width: 100vw;
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
     flex-shrink: 0;
     padding: var(--space-xxl) var(--space-xl) var(--space-lg);
@@ -891,25 +893,47 @@ footer {
 }
 
 @media (max-width: 1024px) {
+    :root {
+        --space-sm: 0.5rem;
+        --space-md: 0.8rem;
+        --space-lg: 1.5rem;
+        --space-xl: 2.2rem;
+        --space-xxl: 3rem;
+        --text-base: clamp(0.85rem, 1.1vw, 1rem);
+        --text-large: clamp(1.1rem, 1.8vw, 1.4rem);
+        --title-card: clamp(1.3rem, 3.5vw, 1.8rem);
+        --title-section: clamp(1.8rem, 4vw, 2.5rem);
+        --title-hero: clamp(2.2rem, 7vw, 3.2rem);
+    }
     .navbar {
         padding: var(--space-md);
     }
     .logo {
-        padding: 0.2rem 0.8rem;
+        padding: 0.2rem 0.5rem;
     }
     .nav-center {
-        display: none; /* Hide navigation links, keep only logo and language for mobile */
+        display: block; /* Keep links visible on mobile/tablet for navigation */
+    }
+    .nav-center ul {
+        gap: clamp(0.35rem, 1.5vw, 0.8rem);
+    }
+    .nav-link {
+        font-size: clamp(0.7rem, 2vw, 0.85rem);
+        padding: 0.15rem 0.35rem;
+    }
+    .lang-toggle {
+        font-size: clamp(0.7rem, 2vw, 0.85rem);
     }
     .panel {
-        padding: var(--space-xl) var(--space-lg);
+        padding: clamp(3.5rem, 8vh, 5rem) clamp(1rem, 4vw, 2.5rem) clamp(1rem, 4vh, 2rem);
     }
     .hero-canvas-container, .about-ink-grid, .project-showcase {
         grid-template-columns: 1fr;
-        gap: var(--space-lg);
+        gap: var(--space-md);
     }
     .about-image {
-        width: 220px;
-        height: 220px;
+        width: clamp(120px, 20vh, 180px);
+        height: clamp(120px, 20vh, 180px);
     }
     .hero-blueprint {
         max-width: 100%;
@@ -917,25 +941,69 @@ footer {
     .bento-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+    .image-mask {
+        height: auto;
+        aspect-ratio: 16/10;
+        max-height: clamp(180px, 25vh, 280px);
+    }
 }
 
 @media (max-width: 768px) {
+    :root {
+        --space-sm: 0.4rem;
+        --space-md: 0.6rem;
+        --space-lg: 1.2rem;
+        --space-xl: 1.8rem;
+        --space-xxl: 2.2rem;
+        --text-base: 0.825rem;
+        --text-large: 1rem;
+        --title-card: 1.2rem;
+        --title-section: 1.6rem;
+        --title-hero: 2rem;
+    }
     .project-iframe {
         display: none !important;
     }
     .image-mask {
-        height: auto;
-        aspect-ratio: 16/9;
+        max-height: 220px;
     }
     .about-desc {
         max-width: 100%;
     }
     .social-block {
-        flex-direction: column;
+        flex-direction: row;
+        flex-wrap: wrap;
         gap: var(--space-sm);
+        justify-content: center;
     }
+    .social-link {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    /* Horizontal swipeable layout for Bento grid stacks on mobile */
     .bento-grid {
-        grid-template-columns: 1fr;
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: var(--space-md);
+        padding: var(--space-xs) 0 var(--space-md);
+        width: 100%;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .bento-grid::-webkit-scrollbar {
+        display: none;
+    }
+    .bento-cell {
+        flex: 0 0 75%;
+        scroll-snap-align: center;
+        max-width: 260px;
+        aspect-ratio: 1.3 / 1;
+        padding: var(--space-md);
+    }
+    .bento-icon {
+        font-size: 1.8rem;
+        margin-bottom: var(--space-xs);
     }
 }
 
